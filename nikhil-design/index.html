@@ -1,0 +1,4278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nikhil Kumar — Designer</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300;1,600;1,700&family=Inter:wght@200;300;400;500&family=DM+Mono:wght@300;400&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --gold: #c9a87c;
+      --gold2: #e8d5b0;
+      --green: #5dbd8a;
+      --white: #f5f3ee;
+      --off: #8a8680;
+      --dim: #252320;
+      --bg: #060608;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Inter', sans-serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    html {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--sans);
+      cursor: none;
+      overflow-x: hidden
+    }
+
+    /* CURSOR */
+    #cur {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      width: 10px;
+      height: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width .25s, height .25s, background .25s;
+      mix-blend-mode: screen
+    }
+
+    #cur-ring {
+      position: fixed;
+      z-index: 9998;
+      pointer-events: none;
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(201, 168, 124, .4);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity .3s
+    }
+
+    body.hovering #cur {
+      width: 60px;
+      height: 60px;
+      background: var(--white)
+    }
+
+    body.hovering #cur-ring {
+      opacity: 0
+    }
+
+    @media(max-width:768px) {
+
+      #cur,
+      #cur-ring {
+        display: none
+      }
+    }
+
+    /* PROGRESS BAR */
+    #prog {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--gold), var(--gold2));
+      width: 0;
+      z-index: 2000;
+      transition: width .1s linear;
+      box-shadow: 0 0 10px var(--gold)
+    }
+
+    /* NAV TRANSITION FLASH */
+    #nav-flash {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, rgba(201, 168, 124, .1) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity .5s ease
+    }
+
+    #nav-flash.on {
+      opacity: 1
+    }
+
+    /* ══ NAV STINGER ══ */
+    #nav-stinger {
+      position: fixed;
+      inset: 0;
+      z-index: 49999;
+      background:
+        radial-gradient(ellipse 65% 45% at 25% 35%, rgba(201, 168, 124, .09) 0%, transparent 62%),
+        radial-gradient(ellipse 45% 55% at 75% 65%, rgba(90, 55, 210, .07) 0%, transparent 58%),
+        radial-gradient(ellipse 50% 40% at 60% 15%, rgba(0, 170, 150, .05) 0%, transparent 55%),
+        linear-gradient(160deg, #0c090c 0%, #060608 45%, #080810 100%);
+      transform: translateY(-101%);
+      pointer-events: none;
+      will-change: transform;
+    }
+
+    /* Gold glowing line on the BOTTOM edge (leading edge sweeping down) */
+    #nav-stinger::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(to right,
+          transparent 0%,
+          rgba(201, 168, 124, .6) 20%,
+          rgba(201, 168, 124, 1) 50%,
+          rgba(201, 168, 124, .6) 80%,
+          transparent 100%);
+      box-shadow: 0 0 18px rgba(201, 168, 124, .7), 0 0 40px rgba(201, 168, 124, .3);
+    }
+
+    #nav-stinger.stg-in {
+      animation: stgIn .38s cubic-bezier(.77, 0, .18, 1) forwards;
+    }
+
+    #nav-stinger.stg-out {
+      animation: stgOut .38s cubic-bezier(.77, 0, .18, 1) forwards;
+    }
+
+    @keyframes stgIn {
+      from {
+        transform: translateY(-101%)
+      }
+
+      to {
+        transform: translateY(0)
+      }
+    }
+
+    @keyframes stgOut {
+      from {
+        transform: translateY(0)
+      }
+
+      to {
+        transform: translateY(101%)
+      }
+    }
+
+    /* GLASS NAVBAR */
+    #navbar {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      width: min(900px, calc(100% - 32px));
+      height: 58px;
+      background: rgba(6, 6, 8, .5);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(201, 168, 124, .15);
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      padding: 0 8px 0 20px;
+      gap: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, .5), inset 0 1px 0 rgba(255, 255, 255, .05);
+      transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1)
+    }
+
+    #navbar.hidden {
+      transform: translate(-50%, -100px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .nb-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(93, 189, 138, .1);
+      border: 1px solid rgba(93, 189, 138, .2);
+      border-radius: 100px;
+      padding: 5px 14px;
+      flex-shrink: 0
+    }
+
+    .nb-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pip 1.8s ease-in-out infinite
+    }
+
+    @keyframes pip {
+
+      0%,
+      100% {
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(93, 189, 138, .4)
+      }
+
+      30% {
+        opacity: .4;
+        box-shadow: 0 0 0 5px rgba(93, 189, 138, 0)
+      }
+    }
+
+    .nb-avail {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .14em;
+      color: var(--green);
+      text-transform: uppercase;
+      white-space: nowrap
+    }
+
+    .nb-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      gap: 2px
+    }
+
+    .nb-btn {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--off);
+      background: none;
+      border: none;
+      cursor: none;
+      padding: 8px 18px;
+      border-radius: 100px;
+      transition: color .3s, background .3s;
+      position: relative;
+      white-space: nowrap
+    }
+
+    .nb-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 1px;
+      background: var(--gold);
+      box-shadow: 0 0 8px var(--gold);
+      transition: width .35s cubic-bezier(.77, 0, .18, 1)
+    }
+
+    .nb-btn:hover,
+    .nb-btn.on {
+      color: var(--white)
+    }
+
+    .nb-btn:hover::after,
+    .nb-btn.on::after {
+      width: 50%
+    }
+
+    .nb-btn.on {
+      background: rgba(201, 168, 124, .1)
+    }
+
+    .nb-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      margin-right: 4px
+    }
+
+    .nb-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), #a07840);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+      cursor: none;
+      box-shadow: 0 0 12px rgba(201, 168, 124, .3);
+      transition: box-shadow .3s, transform .3s;
+    }
+
+    .nb-logo:hover {
+      box-shadow: 0 0 20px rgba(201, 168, 124, .5);
+      transform: scale(1.06);
+    }
+
+    .nb-logo img {
+      width: 90%;
+      height: 90%;
+      object-fit: contain;
+      filter: brightness(0);
+    }
+
+    .nb-name {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--off);
+      white-space: nowrap
+    }
+
+    @media(max-width:600px) {
+
+      .nb-avail,
+      .nb-name {
+        display: none
+      }
+
+      .nb-btn {
+        padding: 6px 10px;
+        font-size: 9px
+      }
+    }
+
+    @media(max-width:480px) {
+      #navbar {
+        height: 52px;
+        top: 10px
+      }
+
+      .nb-btn {
+        padding: 5px 8px;
+        font-size: 8px;
+        letter-spacing: .06em
+      }
+
+      .nb-logo {
+        width: 28px;
+        height: 28px;
+        font-size: 12px
+      }
+    }
+
+    /* LANDING */
+    #s-home {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 580px;
+      overflow: hidden
+    }
+
+    #glCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 1
+    }
+
+    #pCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2
+    }
+
+    #hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 clamp(24px, 5vw, 72px) clamp(32px, 6vh, 72px);
+      pointer-events: none
+    }
+
+    .hero-top-row {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 clamp(24px, 5vw, 72px);
+      pointer-events: none
+    }
+
+    .hero-side-text {
+      font-family: var(--mono);
+      font-size: clamp(9px, .9vw, 11px);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(201, 168, 124, .3);
+      line-height: 1.8;
+      opacity: 0;
+      animation: fIn .8s 1.8s forwards
+    }
+
+    @keyframes fIn {
+      to {
+        opacity: 1
+      }
+    }
+
+    .hero-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+      opacity: 0;
+      animation: fIn .8s 2s forwards
+    }
+
+    .hero-desc-land {
+      font-size: clamp(12px, 1.2vw, 14px);
+      font-weight: 300;
+      color: rgba(245, 243, 238, .35);
+      line-height: 1.9;
+      max-width: 320px
+    }
+
+    .hero-cta-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px
+    }
+
+    .hero-scroll-hint {
+      font-family: var(--mono);
+      font-size: clamp(9px, .9vw, 10px);
+      letter-spacing: .2em;
+      color: rgba(201, 168, 124, .3);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .scroll-line-hero {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold));
+      animation: scLine 2s ease-in-out infinite
+    }
+
+    @keyframes scLine {
+
+      0%,
+      100% {
+        opacity: .3;
+        transform: scaleX(1)
+      }
+
+      50% {
+        opacity: 1;
+        transform: scaleX(.6)
+      }
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--gold2);
+      border: 1px solid rgba(201, 168, 124, .25);
+      padding: 12px 24px;
+      border-radius: 100px;
+      text-decoration: none;
+      cursor: none;
+      pointer-events: all;
+      backdrop-filter: blur(10px);
+      background: rgba(201, 168, 124, .05);
+      transition: all .3s
+    }
+
+    .cta-btn:hover {
+      border-color: rgba(201, 168, 124, .5);
+      color: var(--white);
+      background: rgba(201, 168, 124, .1)
+    }
+
+    @media(max-width:600px) {
+      .hero-top-row {
+        display: none
+      }
+
+      .hero-bottom {
+        flex-direction: column;
+        align-items: flex-start
+      }
+
+      .hero-cta-wrap {
+        align-items: flex-start
+      }
+    }
+
+    /* SHARED SECTIONS */
+    section:not(#s-home) {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh
+    }
+
+    .sec-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 120px 24px 100px;
+      position: relative;
+      z-index: 5
+    }
+
+    .sec-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .sec-label::before {
+      content: '';
+      width: 20px;
+      height: 1px;
+      background: var(--gold)
+    }
+
+    .sec-title {
+      font-family: var(--serif);
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -.02em;
+      background: linear-gradient(135deg, var(--white) 0%, var(--gold2) 60%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 60px;
+      margin-top: 8px;
+      padding-bottom: 8px;
+      position: relative;
+      z-index: 20
+    }
+
+    .sec-title em {
+      font-style: italic
+    }
+
+    .sec-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(201, 168, 124, .2), transparent);
+      position: relative;
+      z-index: 2
+    }
+
+    /* REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .9s cubic-bezier(.16, 1, .3, 1), transform .9s cubic-bezier(.16, 1, .3, 1)
+    }
+
+    .reveal.up {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity .9s cubic-bezier(.16, 1, .3, 1), transform .9s cubic-bezier(.16, 1, .3, 1)
+    }
+
+    .reveal-left.up {
+      opacity: 1;
+      transform: translateX(0)
+    }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity .9s cubic-bezier(.16, 1, .3, 1), transform .9s cubic-bezier(.16, 1, .3, 1)
+    }
+
+    .reveal-right.up {
+      opacity: 1;
+      transform: translateX(0)
+    }
+
+    .rd1 {
+      transition-delay: .1s
+    }
+
+    .rd2 {
+      transition-delay: .2s
+    }
+
+    .rd3 {
+      transition-delay: .3s
+    }
+
+    .rd4 {
+      transition-delay: .4s
+    }
+
+    .rd5 {
+      transition-delay: .5s
+    }
+
+    /* WORKS */
+    #s-works {
+      background: linear-gradient(180deg, #0f0c0d 0%, #060608 100%)
+    }
+
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+      gap: 16px
+    }
+
+    .work-card {
+      background: rgba(255, 255, 255, .02);
+      border: 1px solid rgba(201, 168, 124, .1);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: none;
+      transition: transform .4s cubic-bezier(.16, 1, .3, 1), border-color .3s, box-shadow .4s;
+      transform-style: preserve-3d;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .02);
+      outline: 1px solid rgba(255, 255, 255, .02)
+    }
+
+    .work-card:hover {
+      transform: translateY(-8px) rotateX(2deg) rotateY(-1deg);
+      border-color: rgba(201, 168, 124, .3);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, .5), 0 0 0 1px rgba(201, 168, 124, .15), inset 0 1px 0 rgba(255, 255, 255, .05), 0 0 0 1px rgba(255, 255, 255, .04)
+    }
+
+    .card-thumb {
+      aspect-ratio: 16/10;
+      background: linear-gradient(135deg, #0e0e14, #141420);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden
+    }
+
+    .card-thumb-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(201, 168, 124, .08), transparent 60%);
+      opacity: 0;
+      transition: opacity .4s
+    }
+
+    .work-card:hover .card-thumb-glow {
+      opacity: 1
+    }
+
+    .card-thumb-num {
+      font-family: var(--serif);
+      font-size: 80px;
+      font-weight: 700;
+      color: rgba(201, 168, 124, .06);
+      letter-spacing: -.04em;
+      transition: transform .4s, color .4s
+    }
+
+    .work-card:hover .card-thumb-num {
+      transform: scale(1.1);
+      color: rgba(201, 168, 124, .1)
+    }
+
+    .card-badge {
+      display: none;
+    }
+
+    .card-img-count {
+      display: none;
+    }
+
+    .card-arrow {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 168, 124, .2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--off);
+      font-size: 14px;
+      transition: all .3s;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .12);
+      outline: 1px solid rgba(255, 255, 255, .12)
+    }
+
+    .work-card:hover .card-arrow {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--bg);
+      transform: rotate(45deg)
+    }
+
+    .card-body {
+      padding: 20px
+    }
+
+    /* CARD COVER IMAGE SYSTEM */
+    .card-cover-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform .6s cubic-bezier(.16, 1, .3, 1), filter .4s;
+      filter: brightness(.85) saturate(1.1);
+    }
+
+    .work-card:hover .card-cover-img {
+      transform: scale(1.07);
+      filter: brightness(1) saturate(1.2);
+    }
+
+    .card-cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom,
+          rgba(6, 6, 8, .15) 0%,
+          rgba(6, 6, 8, .08) 35%,
+          rgba(6, 6, 8, .55) 75%,
+          rgba(6, 6, 8, .85) 100%);
+      transition: opacity .4s;
+    }
+
+    .work-card:hover .card-cover-overlay {
+      opacity: .85;
+    }
+
+    .card-img-count {
+      position: absolute;
+      bottom: 44px;
+      right: 12px;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .12em;
+      color: rgba(245, 243, 238, .5);
+      background: rgba(6, 6, 8, .5);
+      border: 1px solid rgba(255, 255, 255, .08);
+      padding: 3px 9px;
+      border-radius: 100px;
+      backdrop-filter: blur(8px);
+    }
+
+    .card-cover-num {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 120px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, .03);
+      letter-spacing: -.06em;
+      pointer-events: none;
+      transition: color .4s, transform .4s;
+    }
+
+    .work-card:hover .card-cover-num {
+      color: rgba(255, 255, 255, .06);
+      transform: scale(1.08);
+    }
+
+    /* Multi-image mosaic strip at bottom (5 × 1:1 previews) */
+    .card-mosaic {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      display: flex;
+      justify-content: center;
+      gap: 2px;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(100%);
+      transition: opacity .45s cubic-bezier(.16, 1, .3, 1), transform .45s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .work-card:hover .card-mosaic {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-mosaic img {
+      width: 64px;
+      height: 64px;
+      flex: 0 0 64px;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(.7) saturate(1.05);
+      transition: filter .3s, transform .35s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .work-card:hover .card-mosaic img {
+      filter: brightness(.88) saturate(1.15);
+    }
+
+    .card-mosaic img:hover {
+      filter: brightness(1.05) saturate(1.25) !important;
+      transform: scale(1.06);
+      z-index: 1;
+      position: relative;
+    }
+
+    .card-n {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: rgba(201, 168, 124, .4);
+      letter-spacing: .1em;
+      margin-bottom: 6px
+    }
+
+    .card-title {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: -.01em;
+      margin-bottom: 4px;
+      transition: color .2s
+    }
+
+    .work-card:hover .card-title {
+      color: var(--gold2)
+    }
+
+    .card-sub {
+      font-size: 12px;
+      color: var(--off);
+      font-weight: 300;
+      letter-spacing: .04em
+    }
+
+    .beh-cta {
+      margin-top: 40px;
+      text-align: center
+    }
+
+    .beh-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--off);
+      text-decoration: none;
+      border: 1px solid rgba(201, 168, 124, .2);
+      padding: 14px 32px;
+      border-radius: 100px;
+      transition: all .3s;
+      cursor: none;
+      backdrop-filter: blur(8px);
+      outline: 1px solid rgba(255, 255, 255, .12)
+    }
+
+    .beh-btn:hover {
+      color: var(--gold);
+      border-color: rgba(201, 168, 124, .5);
+      background: rgba(201, 168, 124, .05);
+      box-shadow: 0 0 24px rgba(201, 168, 124, .1)
+    }
+
+    /* ABOUT */
+    #s-about {
+      background: linear-gradient(180deg, #08080e 10%, #060608 80%)
+    }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 72px;
+      align-items: start
+    }
+
+    .about-img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: linear-gradient(135deg, #0e0e14, #14141e);
+      border: 1px solid rgba(201, 168, 124, .12);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      transition: transform .4s cubic-bezier(.16, 1, .3, 1);
+      transform-style: preserve-3d;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .02), 0 24px 64px rgba(0, 0, 0, .5);
+      outline: 1px solid rgba(255, 255, 255, .02)
+    }
+
+    .about-img-photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      /* Cinematic grading: slight warm lift, contrast boost, subtle vignette blend */
+      filter:
+        brightness(1.05) contrast(1.12) saturate(0.85) sepia(0.08);
+      transition: transform .5s cubic-bezier(.16, 1, .3, 1), filter .4s;
+    }
+
+    .about-photo:hover .about-img-photo {
+      transform: scale(1.03);
+      filter:
+        brightness(1.08) contrast(1.1) saturate(0.9) sepia(0.06);
+    }
+
+    /* Subtle vignette overlay on the photo */
+    .about-img-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center,
+          transparent 40%,
+          rgba(6, 6, 8, .35) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Warm-gold bottom fade */
+    .about-img-fade {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background: linear-gradient(to top,
+          rgba(6, 6, 8, .65) 0%,
+          rgba(6, 6, 8, .1) 60%,
+          transparent 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .about-img-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 30%, rgba(201, 168, 124, .06), transparent 50%)
+    }
+
+    .about-ph {
+      font-family: var(--serif);
+      font-size: 100px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, .04);
+      line-height: 1;
+      position: relative;
+      z-index: 1
+    }
+
+    .about-ph-lbl {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: rgba(201, 168, 124, .3);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1
+    }
+
+    .about-photo:hover .about-img {
+      transform: rotateY(4deg) rotateX(-2deg)
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(201, 168, 124, .08);
+      border: 1px solid rgba(201, 168, 124, .1);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 2px;
+      outline: 1px solid rgba(255, 255, 255, .12)
+    }
+
+    .stat-box {
+      background: #060608;
+      padding: 20px 16px;
+      text-align: center;
+      transition: background .3s
+    }
+
+    .stat-box:hover {
+      background: #0a0a0e
+    }
+
+    .stat-num {
+      font-family: var(--serif);
+      font-size: 36px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--white), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+      line-height: 1.2;
+      min-height: 45px
+    }
+
+    .stat-lbl {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--off);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      display: block;
+      margin-top: 4px
+    }
+
+    .about-avail {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--green);
+      border: 1px solid rgba(93, 189, 138, .2);
+      padding: 7px 16px;
+      border-radius: 100px;
+      background: rgba(93, 189, 138, .05);
+      margin-bottom: 28px;
+      outline: 1px solid rgba(255, 255, 255, .12)
+    }
+
+    .about-intro {
+      font-family: var(--serif);
+      font-size: clamp(22px, 3vw, 38px);
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--white);
+      letter-spacing: -.01em;
+      margin-bottom: 20px
+    }
+
+    .about-intro em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--gold2), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .about-p {
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(245, 243, 238, .5);
+      line-height: 2;
+      margin-bottom: 14px
+    }
+
+    .about-p strong {
+      color: var(--gold2);
+      font-weight: 400
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: rgba(201, 168, 124, .08);
+      border: 1px solid rgba(201, 168, 124, .1);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 28px;
+      outline: 1px solid rgba(255, 255, 255, .12)
+    }
+
+    .sk-cell {
+      background: #060608;
+      padding: 18px 16px;
+      transition: background .3s;
+      border: 1px solid rgba(201, 168, 124, .08);
+      border-radius: 12px;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .08)
+    }
+
+    .sk-cell:hover {
+      background: #0a0a0e;
+      border-color: rgba(201, 168, 124, .15);
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .15)
+    }
+
+    .sk-lbl {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px
+    }
+
+    .sk-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px
+    }
+
+    .sk-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      padding: 3px 9px;
+      border-radius: 100px;
+      border: 1px solid rgba(201, 168, 124, .15);
+      color: rgba(245, 243, 238, .4);
+      letter-spacing: .05em
+    }
+
+    /* REVIEWS */
+    #s-reviews {
+      background: linear-gradient(180deg, #060608 0%, #08080e 100%)
+    }
+
+    .rv-overflow {
+      overflow: hidden;
+      margin: 0 -24px;
+      padding: 60px 24px 0
+    }
+
+    .rv-track {
+      display: flex;
+      gap: 16px;
+      animation: rvAuto 30s linear infinite;
+      width: max-content
+    }
+
+    @keyframes rvAuto {
+      0% {
+        transform: translateX(0)
+      }
+
+      100% {
+        transform: translateX(calc(-50% - 8px))
+      }
+    }
+
+    .rv-card {
+      width: 320px;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, .02);
+      border: 1px solid rgba(201, 168, 124, .1);
+      border-radius: 16px;
+      padding: 28px;
+      backdrop-filter: blur(8px);
+      transition: transform .4s cubic-bezier(.16, 1, .3, 1), border-color .3s, box-shadow .4s;
+      cursor: none;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .02);
+      outline: 1px solid rgba(255, 255, 255, .02)
+    }
+
+    .rv-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(201, 168, 124, .3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, .4), 0 0 0 1px rgba(255, 255, 255, .04)
+    }
+
+    .rv-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 14px
+    }
+
+    .rv-star {
+      font-size: 13px;
+      color: var(--gold)
+    }
+
+    .rv-qmark {
+      font-family: var(--serif);
+      font-size: 44px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: .8;
+      margin-bottom: 10px;
+      opacity: .4
+    }
+
+    .rv-text {
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(245, 243, 238, .5);
+      line-height: 1.9;
+      font-style: italic;
+      margin-bottom: 20px
+    }
+
+    .rv-author {
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .rv-av {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(201, 168, 124, .3), rgba(201, 168, 124, .1));
+      border: 1px solid rgba(201, 168, 124, .2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold);
+      flex-shrink: 0;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .12);
+      outline: 1px solid rgba(255, 255, 255, .12)
+    }
+
+    .rv-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--white)
+    }
+
+    .rv-role {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--off);
+      letter-spacing: .08em
+    }
+
+    /* CONTACT */
+    #s-contact {
+      background: linear-gradient(180deg, #08080e 0%, var(--bg) 100%)
+    }
+
+    .ct-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start
+    }
+
+    .ct-big {
+      font-family: var(--serif);
+      font-size: clamp(48px, 7vw, 88px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -.02em;
+      background: linear-gradient(135deg, var(--white) 0%, var(--gold2) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 32px;
+      margin-top: 8px;
+      padding-bottom: 8px;
+      position: relative;
+      z-index: 20
+    }
+
+    .ct-big em {
+      font-style: italic
+    }
+
+    .ct-tagline {
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(245, 243, 238, .4);
+      line-height: 1.9;
+      max-width: 340px;
+      margin-bottom: 40px
+    }
+
+    .ct-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 0;
+      border-top: 1px solid rgba(201, 168, 124, .08);
+      text-decoration: none;
+      cursor: none;
+      position: relative;
+      overflow: hidden;
+      transition: padding-left .3s
+    }
+
+    .ct-link:last-child {
+      border-bottom: 1px solid rgba(201, 168, 124, .08)
+    }
+
+    .ct-link::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(201, 168, 124, .05), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .4s cubic-bezier(.77, 0, .18, 1)
+    }
+
+    .ct-link:hover::before {
+      transform: scaleX(1)
+    }
+
+    .ct-link:hover {
+      padding-left: 8px
+    }
+
+    .ct-link-l {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      position: relative;
+      z-index: 1
+    }
+
+    .ct-plat {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(201, 168, 124, .35)
+    }
+
+    .ct-val {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--white);
+      transition: color .25s
+    }
+
+    .ct-link:hover .ct-val {
+      color: var(--gold2)
+    }
+
+    .ct-arr {
+      font-size: 18px;
+      color: rgba(201, 168, 124, .2);
+      position: relative;
+      z-index: 1;
+      transition: transform .3s, color .25s
+    }
+
+    .ct-link:hover .ct-arr {
+      transform: translate(4px, -4px);
+      color: var(--gold)
+    }
+
+    .ct-form-wrap {
+      background: rgba(255, 255, 255, .02);
+      border: 1px solid rgba(201, 168, 124, .1);
+      border-radius: 20px;
+      padding: 32px;
+      backdrop-filter: blur(12px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+      outline: 1px solid rgba(255, 255, 255, .12)
+    }
+
+    .f-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    .f-g {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 16px
+    }
+
+    .f-l {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .16em;
+      color: rgba(201, 168, 124, .5);
+      text-transform: uppercase
+    }
+
+    .f-i,
+    .f-ta {
+      background: rgba(255, 255, 255, .03);
+      border: 1px solid rgba(201, 168, 124, .1);
+      border-radius: 8px;
+      color: var(--white);
+      padding: 11px 14px;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 300;
+      outline: none;
+      transition: border-color .25s, background .25s, box-shadow .25s;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, .08)
+    }
+
+    .f-i:focus,
+    .f-ta:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: rgba(201, 168, 124, .04);
+      box-shadow: 0 0 0 3px rgba(201, 168, 124, .06), 0 0 0 1px rgba(255, 255, 255, .15)
+    }
+
+    .f-i::placeholder,
+    .f-ta::placeholder {
+      color: rgba(255, 255, 255, .15)
+    }
+
+    .f-ta {
+      resize: none;
+      height: 90px
+    }
+
+    .f-sbmt {
+      width: 100%;
+      padding: 14px;
+      border-radius: 100px;
+      background: linear-gradient(135deg, var(--gold), #a07840);
+      color: var(--bg);
+      border: none;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      cursor: none;
+      margin-top: 4px;
+      transition: transform .3s, box-shadow .3s, opacity .3s;
+      box-shadow: 0 8px 24px rgba(201, 168, 124, .25)
+    }
+
+    .f-sbmt:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(201, 168, 124, .35)
+    }
+
+    .f-sbmt:active {
+      transform: translateY(0);
+      opacity: .9
+    }
+
+    /* ── Form Toast ── */
+    #form-toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .1em;
+      padding: 14px 24px;
+      border-radius: 100px;
+      backdrop-filter: blur(20px);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .35s, transform .35s cubic-bezier(.16, 1, .3, 1);
+      white-space: nowrap;
+    }
+
+    #form-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #form-toast.success {
+      background: rgba(30, 40, 30, .92);
+      border: 1px solid rgba(90, 200, 120, .35);
+      color: #7ddc9a;
+    }
+
+    #form-toast.error {
+      background: rgba(40, 20, 20, .92);
+      border: 1px solid rgba(200, 80, 80, .35);
+      color: #e88a8a;
+    }
+
+    .ct-foot {
+      margin-top: 80px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(201, 168, 124, .08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px
+    }
+
+    .ct-copy {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: rgba(201, 168, 124, .25);
+      letter-spacing: .1em
+    }
+
+    .ct-back {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(201, 168, 124, .25);
+      text-decoration: none;
+      cursor: none;
+      transition: color .2s
+    }
+
+    .ct-back:hover {
+      color: var(--gold)
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:1024px) {
+      .sec-inner {
+        padding: 100px 32px 80px
+      }
+    }
+
+    @media(max-width:768px) {
+      .sec-inner {
+        padding: 80px 20px 70px
+      }
+
+      .f-row {
+        grid-template-columns: 1fr
+      }
+
+      .works-grid {
+        grid-template-columns: 1fr
+      }
+
+      .about-layout {
+        grid-template-columns: 1fr
+      }
+
+      .ct-layout {
+        grid-template-columns: 1fr;
+        gap: 48px
+      }
+
+      .rv-card {
+        width: 280px
+      }
+
+      .about-ph {
+        font-size: 72px
+      }
+    }
+
+    @media(max-width:480px) {
+      .sec-title {
+        font-size: clamp(36px, 10vw, 64px)
+      }
+
+      .ct-big {
+        font-size: clamp(36px, 10vw, 64px)
+      }
+
+      .ct-form-wrap {
+        padding: 20px
+      }
+
+      .f-row {
+        grid-template-columns: 1fr
+      }
+
+      #s-home {
+        min-height: 100svh
+      }
+    }
+
+    /* ════ COMPREHENSIVE RESPONSIVE ════ */
+
+    /* Touch device: restore native cursor everywhere */
+    @media (hover: none) and (pointer: coarse) {
+      body {
+        cursor: auto;
+      }
+
+      button,
+      a,
+      input,
+      textarea,
+      select,
+      .work-card,
+      .cta-btn,
+      .beh-btn,
+      .nb-btn,
+      .gal-cat-btn,
+      .lb-btn,
+      .lb-close,
+      .gal-close,
+      .card-mosaic img,
+      .f-sbmt,
+      .ct-back,
+      .ct-link,
+      .sk-cell,
+      .stat-box,
+      .rv-card,
+      .gal-item {
+        cursor: auto;
+      }
+
+      .work-card:hover {
+        transform: none;
+        border-color: rgba(201, 168, 124, .1);
+        box-shadow: none;
+      }
+
+      .rv-card:hover {
+        transform: none;
+      }
+
+      .about-photo:hover .about-img {
+        transform: none;
+      }
+    }
+
+    /* ── Gallery & Lightbox — Tablet 768px ── */
+    @media(max-width:768px) {
+      .gal-header {
+        padding: 16px 20px 14px;
+      }
+
+      .gal-cats {
+        padding: 10px 20px;
+      }
+
+      .gal-count {
+        padding: 0 20px 8px;
+      }
+
+      .gal-title {
+        font-size: clamp(18px, 4vw, 28px);
+      }
+
+      .gal-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      #lb-prev {
+        left: 12px;
+      }
+
+      #lb-next {
+        right: 12px;
+      }
+
+      .lb-img-wrap {
+        max-width: calc(100vw - 96px);
+      }
+
+      .stat-num {
+        font-size: 28px;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ct-layout {
+        gap: 40px;
+      }
+
+      .sec-inner {
+        padding: 80px 20px 60px;
+      }
+    }
+
+    /* ── Mobile 480px ── */
+    @media(max-width:480px) {
+      .works-grid {
+        gap: 10px;
+      }
+
+      .card-body {
+        padding: 14px;
+      }
+
+      .card-title {
+        font-size: 18px;
+      }
+
+      .card-mosaic {
+        height: 52px;
+      }
+
+      .card-mosaic img {
+        width: 52px;
+        height: 52px;
+        flex: 0 0 52px;
+      }
+
+      .beh-cta {
+        margin-top: 24px;
+      }
+
+      .beh-btn {
+        padding: 12px 24px;
+        font-size: 10px;
+      }
+
+      .stat-num {
+        font-size: 24px;
+      }
+
+      .stat-box {
+        padding: 14px 8px;
+      }
+
+      .about-avail {
+        font-size: 9px;
+      }
+
+      .about-intro {
+        font-size: clamp(18px, 5vw, 26px);
+      }
+
+      .ct-layout {
+        gap: 28px;
+      }
+
+      .ct-tagline {
+        margin-bottom: 20px;
+        font-size: 13px;
+      }
+
+      .ct-form-wrap {
+        padding: 18px 16px;
+      }
+
+      .ct-foot {
+        margin-top: 48px;
+      }
+
+      #lb-prev {
+        left: 4px;
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+
+      #lb-next {
+        right: 4px;
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+
+      .lb-img-wrap {
+        max-width: calc(100vw - 72px);
+        max-height: calc(100svh - 90px);
+      }
+
+      #lb-img {
+        max-height: calc(100svh - 90px);
+        border-radius: 6px;
+      }
+
+      .lb-close {
+        top: 10px;
+        right: 10px;
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+      }
+
+      .lb-counter {
+        font-size: 8px;
+        padding: 4px 12px;
+        bottom: 12px;
+      }
+
+      #form-toast {
+        width: calc(100% - 24px);
+        white-space: normal;
+        text-align: center;
+        justify-content: center;
+        bottom: 14px;
+        font-size: 10px;
+      }
+
+      #hero-overlay {
+        padding-bottom: clamp(24px, 5vh, 48px);
+      }
+
+      .hero-desc-land {
+        font-size: 12px;
+      }
+
+      .cta-btn {
+        font-size: 9px;
+        padding: 10px 18px;
+      }
+
+      .sec-inner {
+        padding: 68px 16px 56px;
+      }
+
+      .gal-header {
+        padding: 14px 16px;
+      }
+
+      .gal-cats {
+        padding: 10px 16px;
+      }
+
+      .gal-body {
+        padding: 10px 12px 24px;
+      }
+
+      .gal-count {
+        padding: 0 16px 8px;
+      }
+
+      .gal-item.b-wide {
+        grid-column: span 1;
+      }
+    }
+
+    /* ── Very small phones 360px ── */
+    @media(max-width:360px) {
+      .nb-btn {
+        padding: 4px 6px;
+        font-size: 7px;
+        letter-spacing: .04em;
+      }
+
+      .gal-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-box {
+        padding: 12px 10px;
+      }
+    }
+
+
+    /* ══ GALLERY OVERLAY ══ */
+    #gallery-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      background: rgba(6, 6, 8, .55);
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    #gallery-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* Blurred cover-image backdrop */
+    #gal-bg {
+      position: absolute;
+      inset: -5%;
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+      filter: blur(48px) saturate(0.45) brightness(0.22);
+      z-index: 0;
+      transition: background-image .3s;
+    }
+
+    /* Dark scrim on top of the blurred bg so content stays readable */
+    #gal-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg,
+          rgba(8, 5, 2, .7) 0%,
+          rgba(6, 6, 8, .72) 50%,
+          rgba(4, 4, 8, .75) 100%);
+    }
+
+    /* Push all content above the bg */
+    .gal-header,
+    .gal-cats,
+    .gal-count,
+    .gal-body {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Staggered content reveal inside gallery */
+    .gal-header {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+
+    .gal-cats {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+
+    .gal-count {
+      opacity: 0;
+    }
+
+    .gal-body {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    #gallery-overlay.revealed .gal-header {
+      animation: galRevealDown .38s cubic-bezier(.16, 1, .3, 1) .08s forwards;
+    }
+
+    #gallery-overlay.revealed .gal-cats {
+      animation: galRevealDown .35s cubic-bezier(.16, 1, .3, 1) .13s forwards;
+    }
+
+    #gallery-overlay.revealed .gal-count {
+      animation: galFadeOnly .3s ease .16s forwards;
+    }
+
+    #gallery-overlay.revealed .gal-body {
+      animation: galRevealUp .38s cubic-bezier(.16, 1, .3, 1) .19s forwards;
+    }
+
+    @keyframes galRevealDown {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes galRevealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes galFadeOnly {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .gal-header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 40px 20px;
+      border-bottom: 1px solid rgba(201, 168, 124, .1);
+      background: rgba(6, 6, 8, .95);
+      backdrop-filter: blur(24px);
+      position: relative;
+      z-index: 10;
+    }
+
+    .gal-header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .gal-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gal-label::before {
+      content: '';
+      width: 16px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .gal-title {
+      font-family: var(--serif);
+      font-size: clamp(24px, 3.5vw, 40px);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--white) 0%, var(--gold2) 60%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+
+    .gal-close {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 168, 124, .25);
+      background: rgba(201, 168, 124, .05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      color: var(--off);
+      font-size: 20px;
+      line-height: 1;
+      transition: all .25s;
+      flex-shrink: 0;
+    }
+
+    .gal-close:hover {
+      background: rgba(201, 168, 124, .15);
+      border-color: rgba(201, 168, 124, .5);
+      color: var(--white);
+      transform: rotate(90deg);
+    }
+
+    .gal-cats {
+      display: flex;
+      gap: 8px;
+      padding: 16px 40px;
+      flex-shrink: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      border-bottom: 1px solid rgba(201, 168, 124, .07);
+      background: rgba(6, 6, 8, .8);
+    }
+
+    .gal-cats::-webkit-scrollbar {
+      display: none;
+    }
+
+    .gal-cat-btn {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--off);
+      background: rgba(255, 255, 255, .03);
+      border: 1px solid rgba(201, 168, 124, .12);
+      padding: 8px 18px;
+      border-radius: 100px;
+      cursor: none;
+      white-space: nowrap;
+      transition: all .25s;
+      flex-shrink: 0;
+    }
+
+    .gal-cat-btn:hover {
+      color: var(--white);
+      border-color: rgba(201, 168, 124, .3);
+    }
+
+    .gal-cat-btn.active {
+      color: var(--bg);
+      background: linear-gradient(135deg, var(--gold), #a07840);
+      border-color: transparent;
+      box-shadow: 0 4px 16px rgba(201, 168, 124, .25);
+    }
+
+    .gal-count {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: rgba(201, 168, 124, .4);
+      letter-spacing: .1em;
+      padding: 0 40px 10px;
+      flex-shrink: 0;
+      background: rgba(6, 6, 8, .8);
+    }
+
+    .gal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 16px 40px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(201, 168, 124, .2) transparent;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+
+    .gal-body::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .gal-body::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .gal-body::-webkit-scrollbar-thumb {
+      background: rgba(201, 168, 124, .2);
+      border-radius: 2px;
+    }
+
+    /* ── Bento Masonry Grid ── */
+    .gal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 10px;
+      grid-auto-flow: dense;
+      gap: 8px;
+      align-items: start;
+    }
+
+    .gal-item.b-wide {
+      grid-column: span 2;
+    }
+
+    /* 2-col wide items for bento rhythm */
+
+    @media(max-width:1200px) {
+      .gal-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media(max-width:800px) {
+      .gal-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+      }
+    }
+
+    @media(max-width:480px) {
+      .gal-item.b-wide {
+        grid-column: span 1;
+      }
+
+      .gal-header {
+        padding: 14px 16px;
+      }
+
+      .gal-cats {
+        padding: 10px 16px;
+      }
+
+      .gal-body {
+        padding: 10px 12px 24px;
+      }
+
+      .gal-count {
+        padding: 0 16px 8px;
+      }
+    }
+
+    .gal-item {
+      break-inside: avoid;
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: none;
+      border: 1px solid rgba(201, 168, 124, .08);
+      transition: transform .35s cubic-bezier(.16, 1, .3, 1), border-color .3s, box-shadow .35s;
+    }
+
+    .gal-item:hover {
+      transform: translateY(-3px) scale(1.015);
+      border-color: rgba(201, 168, 124, .35);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, .6), 0 0 0 1px rgba(201, 168, 124, .15);
+      z-index: 2;
+    }
+
+    .gal-item img {
+      width: 100%;
+      height: auto;
+      /* natural image height — no cropping */
+      display: block;
+      border-radius: 12px;
+      transition: filter .35s, transform .4s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .gal-item:hover img {
+      filter: brightness(1.06);
+      transform: scale(1.02);
+    }
+
+    .gal-item-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, .7) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity .3s;
+      display: flex;
+      align-items: flex-end;
+      padding: 14px;
+      border-radius: 10px;
+    }
+
+    .gal-item:hover .gal-item-overlay {
+      opacity: 1;
+    }
+
+    .gal-item-overlay-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(201, 168, 124, .2);
+      border: 1px solid rgba(201, 168, 124, .4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold2);
+      font-size: 14px;
+      backdrop-filter: blur(8px);
+      margin-left: auto;
+    }
+
+    .gal-cat-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-family: var(--mono);
+      font-size: 8px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      padding: 3px 10px;
+      background: rgba(6, 6, 8, .7);
+      border: 1px solid rgba(201, 168, 124, .2);
+      border-radius: 100px;
+      backdrop-filter: blur(8px);
+    }
+
+    /* ══ LIGHTBOX ══ */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 6000;
+      background: rgba(6, 6, 8, .97);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+    }
+
+    #lightbox.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .lb-img-wrap {
+      position: relative;
+      max-width: calc(100vw - 140px);
+      max-height: calc(100vh - 120px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #lb-img {
+      max-width: 100%;
+      max-height: calc(100vh - 120px);
+      border-radius: 12px;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, .8);
+      border: 1px solid rgba(201, 168, 124, .15);
+      object-fit: contain;
+      display: block;
+      transition: opacity .2s;
+    }
+
+    .lb-btn {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 168, 124, .25);
+      background: rgba(6, 6, 8, .8);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      color: var(--gold2);
+      font-size: 20px;
+      transition: all .25s;
+      z-index: 6001;
+    }
+
+    .lb-btn:hover {
+      background: rgba(201, 168, 124, .15);
+      border-color: rgba(201, 168, 124, .5);
+      color: var(--white);
+    }
+
+    #lb-prev {
+      left: 20px;
+    }
+
+    #lb-next {
+      right: 20px;
+    }
+
+    .lb-close {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 168, 124, .25);
+      background: rgba(6, 6, 8, .8);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      color: var(--off);
+      font-size: 20px;
+      transition: all .25s;
+      z-index: 6001;
+    }
+
+    .lb-close:hover {
+      color: var(--white);
+      border-color: rgba(201, 168, 124, .5);
+      transform: rotate(90deg);
+    }
+
+    .lb-counter {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .16em;
+      color: rgba(201, 168, 124, .5);
+      text-transform: uppercase;
+      background: rgba(6, 6, 8, .6);
+      padding: 6px 18px;
+      border-radius: 100px;
+      border: 1px solid rgba(201, 168, 124, .1);
+      backdrop-filter: blur(8px);
+      z-index: 6001;
+      white-space: nowrap;
+    }
+
+    .lb-cat-label {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .2em;
+      color: rgba(201, 168, 124, .5);
+      text-transform: uppercase;
+      z-index: 6001;
+      white-space: nowrap;
+    }
+
+    /* ══ PAGE LOADER ══ */
+    #page-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #060608;
+      overflow: hidden;
+      transition: opacity .6s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    #page-loader.done {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Breathing gradient orbs */
+    #page-loader::before {
+      content: '';
+      position: absolute;
+      inset: -25%;
+      background:
+        radial-gradient(ellipse 55% 48% at 24% 32%, rgba(201, 168, 124, .1) 0%, transparent 65%),
+        radial-gradient(ellipse 42% 58% at 78% 70%, rgba(90, 55, 210, .08) 0%, transparent 62%),
+        radial-gradient(ellipse 48% 38% at 65% 16%, rgba(0, 175, 155, .055) 0%, transparent 58%),
+        radial-gradient(ellipse 36% 46% at 12% 80%, rgba(190, 75, 55, .045) 0%, transparent 55%);
+      animation: ld-orbs 12s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    /* Subtle gold grid */
+    #page-loader::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 52px, rgba(201, 168, 124, .02) 52px, rgba(201, 168, 124, .02) 53px),
+        repeating-linear-gradient(90deg, transparent, transparent 52px, rgba(201, 168, 124, .014) 52px, rgba(201, 168, 124, .014) 53px);
+      pointer-events: none;
+    }
+
+    @keyframes ld-orbs {
+      0% {
+        transform: scale(1) translate(0%, 0%);
+        opacity: 1;
+      }
+
+      25% {
+        transform: scale(1.07) translate(4%, -5%);
+        opacity: .88;
+      }
+
+      50% {
+        transform: scale(.95) translate(-3%, 4%);
+        opacity: 1;
+      }
+
+      75% {
+        transform: scale(1.04) translate(-5%, -2%);
+        opacity: .85;
+      }
+
+      100% {
+        transform: scale(1.02) translate(2%, 3%);
+        opacity: 1;
+      }
+    }
+
+    /* Vignette */
+    #ld-vignette {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 92% 92% at center, transparent 32%, rgba(6, 6, 8, .92) 100%);
+    }
+
+    /* ── Glitch keyframes ── */
+    #ld-counter {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #ld-counter.flash-in {
+      animation: glitch-appear .35s cubic-bezier(.16, 1, .3, 1) forwards;
+    }
+
+    #ld-counter.flash-out {
+      animation: glitch-destroy .32s ease-in forwards;
+    }
+
+    @keyframes glitch-appear {
+      0% {
+        opacity: 0;
+        filter: blur(12px);
+        transform: translate(-50%, -50%) scaleX(1.18) skewX(10deg);
+        text-shadow: 4px 0 rgba(255, 30, 80, .7), -4px 0 rgba(0, 220, 200, .7);
+      }
+
+      18% {
+        opacity: 1;
+        filter: blur(3px);
+        transform: translate(-53%, -50%) scaleX(.96) skewX(-5deg);
+        text-shadow: -3px 0 rgba(255, 30, 80, .5), 3px 0 rgba(0, 220, 200, .5);
+      }
+
+      36% {
+        filter: blur(0);
+        transform: translate(-48%, -50%) scaleX(1.03) skewX(3deg);
+        text-shadow: 2px 0 rgba(255, 30, 80, .3), -2px 0 rgba(0, 220, 200, .3);
+      }
+
+      60% {
+        transform: translate(-50.5%, -50%) skewX(-1deg);
+        text-shadow: 1px 0 rgba(255, 30, 80, .1), -1px 0 rgba(0, 220, 200, .1);
+      }
+
+      100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translate(-50%, -50%) scaleX(1) skewX(0);
+        text-shadow: none;
+      }
+    }
+
+    @keyframes glitch-destroy {
+      0% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translate(-50%, -50%) scaleX(1);
+        text-shadow: none;
+      }
+
+      15% {
+        transform: translate(-47%, -49%) scaleX(.98) skewX(6deg);
+        text-shadow: 3px 0 rgba(255, 30, 80, .6), -3px 0 rgba(0, 220, 200, .55);
+      }
+
+      32% {
+        filter: blur(1px);
+        transform: translate(-53%, -51%) scaleX(1.04) skewX(-5deg);
+        text-shadow: -2px 0 rgba(255, 30, 80, .4), 2px 0 rgba(0, 220, 200, .4);
+      }
+
+      52% {
+        opacity: .5;
+        filter: blur(4px);
+        transform: translate(-50%, -50%) scaleX(.92) skewY(3deg);
+        text-shadow: 5px 2px rgba(255, 30, 80, .5), -4px 0 rgba(0, 220, 200, .5);
+      }
+
+      78% {
+        opacity: .12;
+        filter: blur(8px);
+        transform: translate(-50%, -46%) scaleY(.78) skewX(9deg);
+      }
+
+      100% {
+        opacity: 0;
+        filter: blur(16px);
+        transform: translate(-50%, -50%) scaleY(.6) skewX(0);
+      }
+    }
+
+    @keyframes chroma-pulse {
+
+      0%,
+      100% {
+        text-shadow: 1px 0 rgba(255, 40, 80, .22), -1px 0 rgba(0, 210, 190, .22);
+      }
+
+      22% {
+        text-shadow: -2px 0 rgba(255, 40, 80, .38), 2px 0 rgba(0, 210, 190, .35);
+      }
+
+      48% {
+        text-shadow: 2px 1px rgba(255, 40, 80, .18), -1px -1px rgba(0, 210, 190, .18);
+      }
+
+      68% {
+        text-shadow: none;
+      }
+
+      88% {
+        text-shadow: -1px 0 rgba(255, 40, 80, .28), 1px 0 rgba(0, 210, 190, .25);
+      }
+    }
+
+    #ld-counter.flash-in .ld-pct {
+      animation: chroma-pulse 1.3s ease-in-out infinite;
+    }
+
+    .ld-pct {
+      font-family: var(--mono);
+      font-size: clamp(20px, 2.6vw, 30px);
+      font-weight: 300;
+      letter-spacing: .08em;
+      color: rgba(245, 243, 238, .92);
+      line-height: 1;
+    }
+
+    .ld-label {
+      font-family: var(--mono);
+      font-size: 7px;
+      font-weight: 300;
+      letter-spacing: .42em;
+      text-transform: uppercase;
+      color: rgba(201, 168, 124, .48);
+      margin-top: 8px;
+    }
+
+    .ld-track {
+      width: 48px;
+      height: 1px;
+      background: rgba(201, 168, 124, .14);
+      margin: 9px auto 0;
+      overflow: hidden;
+    }
+
+    .ld-fill {
+      height: 100%;
+      width: 0%;
+      background: rgba(201, 168, 124, .72);
+      transition: width .2s linear;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader">
+    <div id="ld-vignette"></div>
+    <div id="ld-counter">
+      <div class="ld-pct" id="ld-pct">0%</div>
+      <div class="ld-label" id="ld-label">Loading</div>
+      <div class="ld-track">
+        <div class="ld-fill" id="ld-fill"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const loader = document.getElementById('page-loader');
+      const counter = document.getElementById('ld-counter');
+      const pctEl = document.getElementById('ld-pct');
+      const fillEl = document.getElementById('ld-fill');
+      const lblEl = document.getElementById('ld-label');
+
+      // Random milestones: jumps of 8–16% from ~6% to ~95%, then 100
+      const milestones = [];
+      let p = 5 + Math.floor(Math.random() * 8);
+      while (p < 96) { milestones.push(p); p += 8 + Math.floor(Math.random() * 8); }
+      milestones.push(100);
+
+      function randPos() {
+        return { x: 10 + Math.random() * 80, y: 10 + Math.random() * 80 };
+      }
+
+      const duration = 3000;  // 3 seconds
+      const showMs = 450;   // flash visible time
+      const outMs = 300;   // destroy anim duration
+      let start = null, mIdx = 0, flashTimer = null, running = true;
+
+      function triggerFlashOut() {
+        counter.classList.remove('flash-in');
+        void counter.offsetWidth;
+        counter.classList.add('flash-out');
+        setTimeout(() => { counter.style.opacity = '0'; counter.classList.remove('flash-out'); }, outMs);
+      }
+
+      function flashAt(val, pos, isFinal) {
+        clearTimeout(flashTimer);
+        counter.style.opacity = '0';
+        counter.style.left = pos.x + 'vw';
+        counter.style.top = pos.y + 'vh';
+        pctEl.textContent = val + '%';
+        fillEl.style.width = val + '%';
+        counter.classList.remove('flash-in', 'flash-out');
+        void counter.offsetWidth;
+        counter.classList.add('flash-in');
+        if (!isFinal) flashTimer = setTimeout(triggerFlashOut, showMs);
+      }
+
+      const labels = ['Loading', 'Preparing', 'Almost there'];
+
+      function tick(ts) {
+        if (!start) start = ts;
+        const t = Math.min((ts - start) / duration, 1);
+        const val = Math.floor(t * 100);
+        lblEl.textContent = labels[Math.min(Math.floor(t * labels.length), labels.length - 1)];
+
+        if (mIdx < milestones.length && val >= milestones[mIdx]) {
+          const isFinal = mIdx === milestones.length - 1;
+          const pos = isFinal ? { x: 50, y: 50 } : randPos();
+          flashAt(val, pos, isFinal);
+          mIdx++;
+          if (isFinal) {
+            running = false;
+            setTimeout(() => {
+              loader.classList.add('done');
+              setTimeout(() => { loader.style.display = 'none'; }, 550);
+            }, 450);
+            return;
+          }
+        }
+        if (running) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    })();
+  </script>
+
+  <div id="nav-stinger"></div>
+  <div id="cur"></div>
+  <div id="cur-ring"></div>
+  <div id="prog"></div>
+  <div id="nav-flash"></div>
+
+  <!-- GLASS NAVBAR -->
+  <nav id="navbar">
+    <div class="nb-right">
+      <div class="nb-logo"><img src="nikhil%20designs.png" alt="Nikhil Designs" /></div>
+      <span class="nb-name">Nikhil Designs</span>
+    </div>
+    <div class="nb-center">
+      <button class="nb-btn on" data-target="s-home">Home</button>
+      <button class="nb-btn" data-target="s-works">Works</button>
+      <button class="nb-btn" data-target="s-about">About</button>
+      <button class="nb-btn" data-target="s-contact">Contact</button>
+    </div>
+    <div class="nb-left"><span class="nb-dot"></span><span class="nb-avail">Open for work</span></div>
+  </nav>
+
+  <!-- SECTION 1 — LANDING (WebGL) -->
+  <section id="s-home">
+    <canvas id="glCanvas"></canvas>
+    <canvas id="pCanvas"></canvas>
+    <div id="hero-overlay">
+      <div class="hero-top-row">
+        <div class="hero-side-text">UI/UX Designer<br />Graphic Designer<br />Esports Branding</div>
+        <div class="hero-side-text" style="text-align:right">Available Now</div>
+      </div>
+      <div class="hero-bottom">
+        <p class="hero-desc-land">3+ years of graphic design experience.<br />Crafting bold visuals &amp; seamless
+          digital experiences.</p>
+        <div class="hero-cta-wrap">
+          <a href="#s-works" class="cta-btn" data-target="s-works">View Works →</a>
+          <div class="hero-scroll-hint">
+            <div class="scroll-line-hero"></div>Scroll to explore
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sec-divider"></div>
+
+  <!-- SECTION 2 — WORKS -->
+  <section id="s-works">
+    <div class="sec-inner">
+      <div class="sec-label reveal">Selected Works</div>
+      <div class="sec-title reveal rd1">My<br /><em>Projects.</em></div>
+      <div
+        style="border:1px solid rgba(201,168,124,.12);border-radius:16px;padding:36px;display:flex;align-items:center;justify-content:space-between;margin-bottom:40px;gap:20px;flex-wrap:wrap;background:rgba(255,255,255,.015);backdrop-filter:blur(8px);cursor:none;transition:border-color .3s"
+        class="reveal rd2" onmouseenter="this.style.borderColor='rgba(201,168,124,.3)'"
+        onmouseleave="this.style.borderColor='rgba(201,168,124,.12)'">
+        <div>
+          <div
+            style="display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,124,.25);padding:5px 12px;border-radius:100px;margin-bottom:16px">
+            <span
+              style="width:5px;height:5px;border-radius:50%;background:var(--gold);animation:pip 1.5s infinite"></span>Coming
+            Soon
+          </div>
+          <div
+            style="font-family:var(--serif);font-size:clamp(26px,4vw,44px);font-weight:700;color:var(--white);line-height:1;margin-bottom:12px">
+            UI/UX Projects Incoming.</div>
+          <p style="font-size:13px;font-weight:300;color:rgba(245,243,238,.4);line-height:1.8;max-width:380px">Crafting
+            my first UI/UX case studies as part of B.Des. at LPU. Stay tuned — something exciting is coming.</p>
+        </div>
+        <div
+          style="font-family:var(--serif);font-size:clamp(80px,12vw,130px);font-weight:700;color:rgba(201,168,124,.04);line-height:1;user-select:none;flex-shrink:0">
+          ?</div>
+      </div>
+      <div class="works-grid">
+
+        <!-- 01 INFAMOUS Esports -->
+        <div class="work-card reveal rd1" onclick="openGallery('infamous', this)" style="cursor:none">
+          <div class="card-thumb">
+            <img class="card-cover-img" src="Infamous%20Esports/UESS1/UESs1%20Main%20Banner%20(2).jpg"
+              alt="INFAMOUS Esports" style="object-position:center top" />
+            <div class="card-cover-overlay"></div>
+            <div class="card-badge">Esports · Branding</div>
+            <div class="card-img-count">124 images</div>
+            <div class="card-mosaic">
+              <img src="Infamous%20Esports/Master%20Cup%20%26%20Glitch/MasterCup%20Main%20Banner.jpg" alt=""
+                loading="lazy" />
+              <img src="Infamous%20Esports/BFR/S2/BFR%20S2%20BANNER.jpg" alt="" loading="lazy" />
+              <img src="Infamous%20Esports/FMS2/FMS2%20GRAND%20FINALISTS.jpg" alt="" loading="lazy" />
+              <img src="Infamous%20Esports/UESS1/UESS1%20Champions.jpg" alt="" loading="lazy" />
+              <img src="Infamous%20Esports/Master%20Cup%20%26%20Glitch/GlitchPop%204%200%20Main%20Banner.jpg" alt=""
+                loading="lazy" />
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+          <div class="card-body">
+            <div class="card-n">01 / 2024</div>
+            <div class="card-title">INFAMOUS Esports</div>
+            <div class="card-sub">Full brand kit · Jersey · Social kit · <span
+                style="color:var(--gold);font-size:10px">View Gallery →</span></div>
+          </div>
+        </div>
+
+        <!-- 02 SEERF Studios -->
+        <div class="work-card reveal rd2" onclick="openGallery('seerf', this)" style="cursor:none">
+          <div class="card-thumb">
+            <img class="card-cover-img"
+              src="Seerf%20Studios/J%26K%20Convergance%20Cup/Seerf%20Banner%201%20lakh%20(1).jpg" alt="SEERF Studios"
+              style="object-position:center top" />
+            <div class="card-cover-overlay"></div>
+            <div class="card-badge">Esports · Design</div>
+            <div class="card-img-count">76 images</div>
+            <div class="card-mosaic">
+              <img src="Seerf%20Studios/Summer%20Cup/SUMMER%20CUP%20BANNER.jpg" alt="" loading="lazy" />
+              <img src="Seerf%20Studios/SMC/SMC%20Banner%20(2).jpg" alt="" loading="lazy" />
+              <img src="Seerf%20Studios/QA%20AC/QA%20ARISTOS%20CUP%20(1).jpg" alt="" loading="lazy" />
+              <img src="Seerf%20Studios/Glacier%20Cup/GC%20BANNER%20(1).jpg" alt="" loading="lazy" />
+              <img src="Seerf%20Studios/J%26K%20Convergance%20Cup/Seerf%20Banner%201%20lakh%20(1).jpg" alt=""
+                loading="lazy" />
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+          <div class="card-body">
+            <div class="card-n">02 / 2024</div>
+            <div class="card-title">SEERF Studios</div>
+            <div class="card-sub">Esports org branding · <span style="color:var(--gold);font-size:10px">View Gallery
+                →</span></div>
+          </div>
+        </div>
+
+        <!-- 03 Esports Works Vol.2 -->
+        <div class="work-card reveal rd3" onclick="openGallery('esportsvol2', this)" style="cursor:none">
+          <div class="card-thumb">
+            <img class="card-cover-img"
+              src="Esports%20Work%20Vol.2/HeatBeast/Universal%20Series%20COMING%20SOON%20Glass%20Effect%20Banner.jpg"
+              alt="Esports Works Vol.2" style="object-position:center top" />
+            <div class="card-cover-overlay"></div>
+            <div class="card-badge">Esports · Vol.2</div>
+            <div class="card-img-count">51 images</div>
+            <div class="card-mosaic">
+              <img src="Esports%20Work%20Vol.2/Treasure%20NFT/Treasure%20NFT%20banner%20(1).jpg" alt=""
+                loading="lazy" />
+              <img src="Esports%20Work%20Vol.2/SE/SE%20DOMINATION%20Scrims%20Posters.jpg" alt="" loading="lazy" />
+              <img src="Esports%20Work%20Vol.2/HeatBeast/Universal%20Series%20Main%20Banner.jpg" alt=""
+                loading="lazy" />
+              <img src="Esports%20Work%20Vol.2/Voltex/BOU%20S3%20BANNER.jpg" alt="" loading="lazy" />
+              <img
+                src="Esports%20Work%20Vol.2/HeatBeast/Universal%20Series%20COMING%20SOON%20Glass%20Effect%20Banner.jpg"
+                alt="" loading="lazy" />
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+          <div class="card-body">
+            <div class="card-n">03 / 2024</div>
+            <div class="card-title">Esports Works Vol.2</div>
+            <div class="card-sub">Multi-client graphics · <span style="color:var(--gold);font-size:10px">View Gallery
+                →</span></div>
+          </div>
+        </div>
+
+        <!-- 04 Tournament Logos -->
+        <div class="work-card reveal rd1" onclick="openGallery('tournamentlogos', this)" style="cursor:none">
+          <div class="card-thumb">
+            <img class="card-cover-img" src="Tournament%20Logos/Logo.jpeg" alt="Tournament Logos" />
+            <div class="card-cover-overlay"></div>
+            <div class="card-badge">Logo Design</div>
+            <div class="card-img-count">22 images</div>
+            <div class="card-mosaic">
+              <img src="Tournament%20Logos/Logo.jpeg" alt="" loading="lazy" />
+              <img src="Tournament%20Logos/20250319_003825.jpg" alt="" loading="lazy" />
+              <img src="Tournament%20Logos/IMG_20260329_231327.jpg" alt="" loading="lazy" />
+              <img src="Tournament%20Logos/Logo%20(3).jpeg" alt="" loading="lazy" />
+              <img src="Tournament%20Logos/Untitled%20(5).jpeg" alt="" loading="lazy" />
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+          <div class="card-body">
+            <div class="card-n">04 / 2023</div>
+            <div class="card-title">Tournament Logos</div>
+            <div class="card-sub">Esports tournament identity · <span style="color:var(--gold);font-size:10px">View
+                Gallery →</span></div>
+          </div>
+        </div>
+
+        <!-- 05 Thumbnails & Banners -->
+        <div class="work-card reveal rd2" onclick="openGallery('thumbnails', this)" style="cursor:none">
+          <div class="card-thumb">
+            <img class="card-cover-img"
+              src="Thumbnail%20%26%20Banner/Thumbnail/1v1%20Pookie%20Subscribers%20Thumbnail.jpg" alt="Thumbnails" />
+            <div class="card-cover-overlay"></div>
+            <div class="card-badge">Thumbnail · Banner</div>
+            <div class="card-img-count">33 images</div>
+            <div class="card-mosaic">
+              <img src="Thumbnail%20%26%20Banner/Esports%20Thumbnail/FMS2%20GRAND%20FINALS%20THUMBNAIL.jpg" alt=""
+                loading="lazy" />
+              <img src="Thumbnail%20%26%20Banner/Thumbnail/Butterfly%20thumbnail1.jpg" alt="" loading="lazy" />
+              <img src="Thumbnail%20%26%20Banner/Esports%20Thumbnail/GC%20Pre-Quarter%20Thumbnail.jpg" alt=""
+                loading="lazy" />
+              <img src="Thumbnail%20%26%20Banner/Thumbnail/xBeasttt77%20Live%20Thumbnail%20(1).jpg" alt=""
+                loading="lazy" />
+              <img src="Thumbnail%20%26%20Banner/Esports%20Thumbnail/IUL%20GRAND%20THUMBNAIL.jpg" alt=""
+                loading="lazy" />
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+          <div class="card-body">
+            <div class="card-n">05 / 2023</div>
+            <div class="card-title">Thumbnails & Banners</div>
+            <div class="card-sub">YouTube · Social media · <span style="color:var(--gold);font-size:10px">View Gallery
+                →</span></div>
+          </div>
+        </div>
+
+        <!-- 06 Logos -->
+        <div class="work-card reveal rd3" onclick="openGallery('logos', this)" style="cursor:none">
+          <div class="card-thumb">
+            <img class="card-cover-img" src="LOGOS/Final%20AC%20logo%20(4k).jpg" alt="Logos" />
+            <div class="card-cover-overlay"></div>
+            <div class="card-badge">Logo · Branding</div>
+            <div class="card-img-count">21 images</div>
+            <div class="card-mosaic">
+              <img src="LOGOS/Final%20AC%20logo%20(4k).jpg" alt="" loading="lazy" />
+              <img src="LOGOS/SLGX%20LOGO.jpg" alt="" loading="lazy" />
+              <img src="LOGOS/vX%20logo.jpeg" alt="" loading="lazy" />
+              <img src="LOGOS/ZLight%20System%20Logo%20(2).jpeg" alt="" loading="lazy" />
+              <img src="LOGOS/RE%20logo%20White.jpg" alt="" loading="lazy" />
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+          <div class="card-body">
+            <div class="card-n">06 / 2025</div>
+            <div class="card-title">Logos</div>
+            <div class="card-sub">Brand identities & logo designs · <span style="color:var(--gold);font-size:10px">View
+                Gallery →</span></div>
+          </div>
+        </div>
+
+        <!-- 07 Social Media Banners -->
+        <div class="work-card reveal rd1" onclick="openGallery('socialbanners', this)" style="cursor:none">
+          <div class="card-thumb">
+            <img class="card-cover-img" src="Social%20Media%20Banners/Study%20Galaxy%20Banner.jpg"
+              alt="Social Media Banners" />
+            <div class="card-cover-overlay"></div>
+            <div class="card-badge">Social · Banners</div>
+            <div class="card-img-count">42 images</div>
+            <div class="card-mosaic">
+              <img src="Social%20Media%20Banners/Lekme/Lakme%20Poster%202.jpg" alt="" loading="lazy" />
+              <img src="Social%20Media%20Banners/Khasta%20Banner.jpg" alt="" loading="lazy" />
+              <img src="Social%20Media%20Banners/Monty%20Bday%20Banner.jpg" alt="" loading="lazy" />
+              <img src="Social%20Media%20Banners/PERFUME%20BANNER%20DESIGN%20by%20NIKHIL%20GRAFIC%401.5x.jpg" alt=""
+                loading="lazy" />
+              <img src="Social%20Media%20Banners/Study%20Galaxy%20Banner%20(1).jpg" alt="" loading="lazy" />
+            </div>
+            <div class="card-arrow">↗</div>
+          </div>
+          <div class="card-body">
+            <div class="card-n">07 / 2025</div>
+            <div class="card-title">Social Media Banners</div>
+            <div class="card-sub">Instagram · Posters · Promotional · <span
+                style="color:var(--gold);font-size:10px">View Gallery →</span></div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="beh-cta reveal"><a href="https://www.behance.net/nikhil_designs" target="_blank"
+          class="beh-btn">Follow my work on Behance ↗</a></div>
+    </div>
+  </section>
+
+  <div class="sec-divider"></div>
+
+  <!-- SECTION 3 — ABOUT -->
+  <section id="s-about">
+    <div class="sec-inner">
+      <div class="sec-label reveal">About Me</div>
+      <div class="sec-title reveal rd1">The Person<br /><em>Behind it.</em></div>
+      <div class="about-layout">
+        <div class="about-photo reveal-left">
+          <div class="about-img">
+            <img class="about-img-photo" src="ABOUT%20image.jpg" alt="Nikhil Kumar" />
+            <div class="about-img-vignette"></div>
+            <div class="about-img-fade"></div>
+          </div>
+          <div class="about-stats">
+            <div class="stat-box"><span class="stat-num">3+</span><span class="stat-lbl">Years Exp.</span></div>
+            <div class="stat-box"><span class="stat-num">10+</span><span class="stat-lbl">Projects</span></div>
+            <div class="stat-box"><span class="stat-num">∞</span><span class="stat-lbl">Passion</span></div>
+          </div>
+        </div>
+        <div class="reveal-right">
+          <div class="about-avail rd1"><span class="nb-dot" style="background:var(--green)"></span>Available for
+            Freelance</div>
+          <div class="about-intro rd2">Designing with<br /><em>purpose, passion</em><br />& precision.</div>
+          <p class="about-p rd3">I'm <strong>Nikhil Kumar</strong>, a passionate UI/UX Design student at <strong>Lovely
+              Professional University (LPU)</strong>, Jalandhar. 3+ years of graphic design experience in visual
+            communication and digital product design.</p>
+          <p class="about-p rd4">Started with a deep love for gaming culture & esports — shaped my design style into
+            something <strong>bold, energetic and impactful</strong>. Now merging that with <strong>UI/UX
+              design</strong> to create complete digital experiences.</p>
+          <div class="skills-grid rd5">
+            <div class="sk-cell">
+              <div class="sk-lbl">UI/UX</div>
+              <div class="sk-tags"><span class="sk-tag">Figma</span><span class="sk-tag">Wireframes</span><span
+                  class="sk-tag">Prototype</span></div>
+            </div>
+            <div class="sk-cell">
+              <div class="sk-lbl">Graphics</div>
+              <div class="sk-tags"><span class="sk-tag">Photoshop</span><span class="sk-tag">Illustrator</span></div>
+            </div>
+            <div class="sk-cell">
+              <div class="sk-lbl">Esports</div>
+              <div class="sk-tags"><span class="sk-tag">Branding</span><span class="sk-tag">Jersey</span><span
+                  class="sk-tag">Logo</span></div>
+            </div>
+            <div class="sk-cell">
+              <div class="sk-lbl">Content</div>
+              <div class="sk-tags"><span class="sk-tag">Thumbnails</span><span class="sk-tag">Banners</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sec-divider"></div>
+
+  <!-- REVIEWS -->
+  <section id="s-reviews">
+    <div class="sec-inner" style="padding-bottom:0">
+      <div class="sec-label reveal">Client Reviews</div>
+      <div class="sec-title reveal rd1">What They<br /><em>Say.</em></div>
+    </div>
+    <div class="rv-overflow reveal rd2" style="padding-bottom:80px">
+      <div class="rv-track">
+        <div class="rv-card">
+          <div class="rv-stars"><span class="rv-star">★</span><span class="rv-star">★</span><span
+              class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span></div>
+          <div class="rv-qmark">"</div>
+          <p class="rv-text">Nikhil's esports branding for INFAMOUS was outstanding. He understood our vision
+            immediately and delivered beyond expectations. The Esports Designs kit were fire!</p>
+          <div class="rv-author">
+            <div class="rv-av">HK</div>
+            <div>
+              <div class="rv-name">Harsh Kolte</div>
+              <div class="rv-role">Founder · INFAMOUS Esports</div>
+            </div>
+          </div>
+        </div>
+        <div class="rv-card">
+          <div class="rv-stars"><span class="rv-star">★</span><span class="rv-star">★</span><span
+              class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span></div>
+          <div class="rv-qmark">"</div>
+          <p class="rv-text">Amazing thumbnail designs! Very creative, fast delivery and always open to feedback. Our
+            channel views improved significantly after the redesign. Highly recommend!</p>
+          <div class="rv-author">
+            <div class="rv-av">S</div>
+            <div>
+              <div class="rv-name">Sneha</div>
+              <div class="rv-role">YouTube Creator</div>
+            </div>
+          </div>
+        </div>
+        <div class="rv-card">
+          <div class="rv-stars"><span class="rv-star">★</span><span class="rv-star">★</span><span
+              class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span></div>
+          <div class="rv-qmark">"</div>
+          <p class="rv-text">The logo Nikhil created for our tournament was exactly what we needed. Professional, bold,
+            very esports-appropriate. Definitely will work again!</p>
+          <div class="rv-author">
+            <div class="rv-av">HK</div>
+            <div>
+              <div class="rv-name">Harsh Kumar</div>
+              <div class="rv-role">Tournament Organizer</div>
+            </div>
+          </div>
+        </div>
+        <div class="rv-card">
+          <div class="rv-stars"><span class="rv-star">★</span><span class="rv-star">★</span><span
+              class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span></div>
+          <div class="rv-qmark">"</div>
+          <p class="rv-text">SEERF Studios branding came out incredible. Nikhil perfectly blends modern aesthetics with
+            esports culture. Very professional throughout the whole project.</p>
+          <div class="rv-author">
+            <div class="rv-av">B</div>
+            <div>
+              <div class="rv-name">Betray</div>
+              <div class="rv-role">Founder · SEERF Studios</div>
+            </div>
+          </div>
+        </div>
+        <div class="rv-card">
+          <div class="rv-stars"><span class="rv-star">★</span><span class="rv-star">★</span><span
+              class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span></div>
+          <div class="rv-qmark">"</div>
+          <p class="rv-text">Great eye for design. Banner designs were delivered quickly with top quality. Communication
+            was smooth and he really listened to what we wanted. 10/10!</p>
+          <div class="rv-author">
+            <div class="rv-av">Sz</div>
+            <div>
+              <div class="rv-name">Sprayzz</div>
+              <div class="rv-role">BGMI Content Creator</div>
+            </div>
+          </div>
+        </div>
+        <div class="rv-card">
+          <div class="rv-stars"><span class="rv-star">★</span><span class="rv-star">★</span><span
+              class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span></div>
+          <div class="rv-qmark">"</div>
+          <p class="rv-text">Nikhil's esports branding for INFAMOUS was outstanding. He understood our vision
+            immediately and delivered beyond expectations. The jersey and social kit were fire!</p>
+          <div class="rv-author">
+            <div class="rv-av">AK</div>
+            <div>
+              <div class="rv-name">Ashish Kumar</div>
+              <div class="rv-role">Manager · INFAMOUS Esports</div>
+            </div>
+          </div>
+        </div>
+        <div class="rv-card">
+          <div class="rv-stars"><span class="rv-star">★</span><span class="rv-star">★</span><span
+              class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span></div>
+          <div class="rv-qmark">"</div>
+          <p class="rv-text">Amazing thumbnail designs! Very creative, fast delivery and always open to feedback. Our
+            channel views improved significantly after the redesign. Highly recommend!</p>
+          <div class="rv-author">
+            <div class="rv-av">TK</div>
+            <div>
+              <div class="rv-name">Treeko</div>
+              <div class="rv-role">Manager · YouTube Creator</div>
+            </div>
+          </div>
+        </div>
+        <div class="rv-card">
+          <div class="rv-stars"><span class="rv-star">★</span><span class="rv-star">★</span><span
+              class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span></div>
+          <div class="rv-qmark">"</div>
+          <p class="rv-text">The Designs Nikhil created for our tournament was exactly what we needed. Professional,
+            bold,
+            very esports-appropriate. Definitely will work again!</p>
+          <div class="rv-author">
+            <div class="rv-av">HK</div>
+            <div>
+              <div class="rv-name">Husain Kazmi</div>
+              <div class="rv-role">Owner · HeatBeast Esports</div>
+            </div>
+          </div>
+        </div>
+        <div class="rv-card">
+          <div class="rv-stars"><span class="rv-star">★</span><span class="rv-star">★</span><span
+              class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span></div>
+          <div class="rv-qmark">"</div>
+          <p class="rv-text">Esports tournament branding came out incredible. Nikhil perfectly blends modern aesthetics
+            with
+            esports culture. Very professional throughout the whole project.</p>
+          <div class="rv-author">
+            <div class="rv-av">A</div>
+            <div>
+              <div class="rv-name">Aryan</div>
+              <div class="rv-role">Manager · HIVE THE GAMING ARENA</div>
+            </div>
+          </div>
+        </div>
+        <div class="rv-card">
+          <div class="rv-stars"><span class="rv-star">★</span><span class="rv-star">★</span><span
+              class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span></div>
+          <div class="rv-qmark">"</div>
+          <p class="rv-text">Great eye for design. Social Media Banner designs were delivered quickly with top quality.
+            Communication
+            was smooth and he really listened to what we wanted. 10/10!</p>
+          <div class="rv-author">
+            <div class="rv-av">VS</div>
+            <div>
+              <div class="rv-name">Vardan Satti</div>
+              <div class="rv-role">Lekme TrikutaNagar</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sec-divider"></div>
+
+  <!-- SECTION 4 — CONTACT -->
+  <section id="s-contact">
+    <div class="sec-inner">
+      <div class="sec-label reveal">Get In Touch</div>
+      <div class="ct-layout">
+        <div>
+          <div class="ct-big reveal rd1">Let's<br />Create<br /><em>Together.</em></div>
+          <p class="ct-tagline reveal rd2">Open for freelance — esports branding, logos, UI/UX, banners. Got a vision?
+            Let's make it real.</p>
+          <div class="ct-links reveal rd3">
+            <a href="mailto:nikhilgaming32@gmail.com" class="ct-link">
+              <div class="ct-link-l"><span class="ct-plat">Email</span><span
+                  class="ct-val">nikhilgaming32@gmail.com</span></div><span class="ct-arr">↗</span>
+            </a>
+            <a href="https://www.behance.net/nikhil_designs" target="_blank" class="ct-link">
+              <div class="ct-link-l"><span class="ct-plat">Behance</span><span
+                  class="ct-val">behance.net/nikhil_designs</span></div><span class="ct-arr">↗</span>
+            </a>
+            <a href="https://linkedin.com/in/nikhildesigns" target="_blank" class="ct-link">
+              <div class="ct-link-l"><span class="ct-plat">LinkedIn</span><span
+                  class="ct-val">linkedin.com/in/nikhildesigns</span></div><span class="ct-arr">↗</span>
+            </a>
+          </div>
+        </div>
+        <div class="ct-form-wrap reveal-right rd2">
+          <!-- Web3Forms: free email service — replace ACCESS_KEY with yours from web3forms.com -->
+          <form id="contact-form">
+            <input type="hidden" name="access_key" value="da301559-5b61-4dc6-9431-5ab2b23fbba1" />
+            <input type="hidden" name="subject" value="New message from Portfolio" />
+            <input type="hidden" name="from_name" value="Nikhil Portfolio" />
+            <div class="f-row">
+              <div class="f-g"><label class="f-l">Name</label><input class="f-i" type="text" name="name"
+                  placeholder="Your name" required /></div>
+              <div class="f-g"><label class="f-l">Email</label><input class="f-i" type="email" name="email"
+                  placeholder="your@email.com" required /></div>
+            </div>
+            <div class="f-g"><label class="f-l">Website</label><input class="f-i" type="url" name="website"
+                placeholder="https://yoursite.com" /></div>
+            <div class="f-g"><label class="f-l">Subject</label><input class="f-i" type="text" name="subject_line"
+                placeholder="What's this about?" required /></div>
+            <div class="f-g"><label class="f-l">Message</label><textarea class="f-ta" name="message"
+                placeholder="Tell me about your project..." required></textarea></div>
+            <button class="f-sbmt" id="form-submit-btn" type="submit">
+              <span id="form-btn-text">Send Message →</span>
+              <span id="form-btn-loader" style="display:none">Sending…</span>
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="ct-foot reveal">
+        <span class="ct-copy">© 2025 Nikhil Kumar · All rights reserved</span>
+        <a href="#s-home" class="ct-back" data-target="s-home">Back to top ↑</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toast notification -->
+  <div id="form-toast"></div>
+
+  <!-- GALLERY OVERLAY -->
+  <div id="gallery-overlay">
+    <div id="gal-bg"></div>
+    <div class="gal-header">
+      <div class="gal-header-left">
+        <div class="gal-label" id="gal-label">Project Gallery</div>
+        <div class="gal-title" id="gal-title">Gallery</div>
+      </div>
+      <button class="gal-close" onclick="closeGallery()" title="Close">✕</button>
+    </div>
+    <div class="gal-cats" id="gal-cats"></div>
+    <div class="gal-count" id="gal-count"></div>
+    <div class="gal-body">
+      <div class="gal-grid" id="gal-grid"></div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox">
+    <button class="lb-close" id="lb-close" title="Close">✕</button>
+    <span class="lb-cat-label" id="lb-cat-label"></span>
+    <button class="lb-btn" id="lb-prev" title="Previous">←</button>
+    <div class="lb-img-wrap">
+      <img id="lb-img" src="" alt="" />
+    </div>
+    <button class="lb-btn" id="lb-next" title="Next">→</button>
+    <div class="lb-counter" id="lb-counter"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    /* ══ LANDING WebGL ══ */
+    (function () {
+      const sec = document.getElementById('s-home');
+      const gl = document.getElementById('glCanvas');
+      const pc = document.getElementById('pCanvas');
+      const W = () => sec.clientWidth, H = () => sec.clientHeight;
+
+      function resize(c) {
+        c.width = W() * Math.min(devicePixelRatio, 2);
+        c.height = H() * Math.min(devicePixelRatio, 2);
+        c.style.width = W() + 'px'; c.style.height = H() + 'px';
+      }
+      resize(gl); resize(pc);
+
+      function makeText() {
+        const c = document.createElement('canvas');
+        c.width = W() * 2; c.height = H() * 2;
+        const ctx = c.getContext('2d');
+        const bg = ctx.createLinearGradient(0, 0, c.width, c.height);
+        bg.addColorStop(0, '#060608'); bg.addColorStop(.4, '#0a0810');
+        bg.addColorStop(.7, '#080608'); bg.addColorStop(1, '#060608');
+        ctx.fillStyle = bg; ctx.fillRect(0, 0, c.width, c.height);
+        for (let i = 0; i < 18000; i++) { ctx.fillStyle = `rgba(201,168,124,${Math.random() * .018})`; ctx.fillRect(Math.random() * c.width, Math.random() * c.height, 1, 1); }
+        const glow = (x, y, r, col, a) => { const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, col.replace('A', a + '')); g.addColorStop(1, col.replace('A', '0')); ctx.fillStyle = g; ctx.fillRect(x - r, y - r, r * 2, r * 2) };
+        glow(c.width * .5, c.height * .5, c.width * .45, 'rgba(201,168,124,A)', .07);
+        glow(c.width * .2, c.height * .7, c.width * .3, 'rgba(93,189,138,A)', .04);
+        glow(c.width * .8, c.height * .2, c.width * .3, 'rgba(120,80,200,A)', .035);
+        ctx.strokeStyle = 'rgba(201,168,124,0.12)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(c.width * .1, c.height * .22); ctx.lineTo(c.width * .9, c.height * .22); ctx.stroke();
+        const fs1 = Math.floor(c.width / 5), fs2 = Math.floor(c.width / 5.8);
+        const lG = fs1 * .12, l1 = fs1 * .72, l2 = fs2 * .72, tot = l1 + lG + l2;
+        const bt = (c.height - tot) / 2, y1 = bt + l1, y2 = y1 + lG + l2;
+        ctx.save(); ctx.font = `900 italic ${fs1}px 'Cormorant Garamond',Georgia,serif`;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+        const tg = ctx.createLinearGradient(0, bt, c.width, y2 + fs2 * .2);
+        tg.addColorStop(0, '#fff'); tg.addColorStop(.3, '#e8d5b0'); tg.addColorStop(.6, '#c9a87c'); tg.addColorStop(1, '#8a6840');
+        ctx.fillStyle = tg; ctx.fillText('NIKHIL', c.width / 2, y1); ctx.restore();
+        ctx.save(); ctx.font = `300 ${fs2}px 'Cormorant Garamond',Georgia,serif`;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+        const tg2 = ctx.createLinearGradient(0, y1, c.width, y2 + fs2 * .3);
+        tg2.addColorStop(0, 'rgba(201,168,124,.9)'); tg2.addColorStop(.5, 'rgba(245,243,238,.7)'); tg2.addColorStop(1, 'rgba(201,168,124,.5)');
+        ctx.fillStyle = tg2; ctx.fillText('DESIGNS', c.width / 2, y2); ctx.restore();
+        const ty = y2 + fs2 * .55;
+        ctx.save(); ctx.font = `300 ${Math.floor(c.width * .022)}px 'DM Mono',monospace`;
+        ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(201,168,124,.35)';
+        ctx.fillText('UI/UX · ESPORTS · BRANDING', c.width / 2, ty); ctx.restore();
+        return c;
+      }
+
+      const ren = new THREE.WebGLRenderer({ canvas: gl, antialias: true });
+      ren.setPixelRatio(Math.min(devicePixelRatio, 2)); ren.setSize(W(), H()); ren.setClearColor(0x060608, 1);
+      const sc = new THREE.Scene(), cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+      const tex = new THREE.CanvasTexture(makeText()); tex.minFilter = tex.magFilter = THREE.LinearFilter;
+      const dc = document.createElement('canvas'); dc.width = dc.height = 256;
+      const dctx = dc.getContext('2d');
+      const rdg = dctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+      rdg.addColorStop(0, 'rgba(255,255,255,1)'); rdg.addColorStop(.4, 'rgba(180,180,180,.6)'); rdg.addColorStop(1, 'rgba(0,0,0,0)');
+      dctx.fillStyle = rdg; dctx.fillRect(0, 0, 256, 256);
+      const dtex = new THREE.CanvasTexture(dc);
+      const vsh = `varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position,1.);}`;
+      const fsh = `precision highp float;
+    uniform sampler2D uT,uD;uniform vec2 uM;uniform float uR,uS,uTm;varying vec2 vUv;
+    void main(){
+      vec2 uv=vUv;float d=distance(uv,uM);float f=smoothstep(uR,0.,d);
+      float w=sin(d*30.-uTm*4.)*.5+.5;float rp=f*w;
+      vec2 dir=normalize(uv-uM+.0001);vec2 disp=uv+dir*rp*uS;
+      vec4 col=texture2D(uT,disp);float ab=rp*uS*.8;
+      col.r=texture2D(uT,disp+vec2(ab,0.)).r;
+      col.g=texture2D(uT,disp).g;
+      col.b=texture2D(uT,disp-vec2(ab,0.)).b;
+      float gl2=f*f*.35;col.rgb+=vec3(.78,.66,.49)*gl2;
+      col.rgb+=vec3(.04,.03,.02)*(1.-f)*.15;
+      gl_FragColor=vec4(col.rgb,1.);}`;
+      const mat = new THREE.ShaderMaterial({ vertexShader: vsh, fragmentShader: fsh, uniforms: { uT: { value: tex }, uD: { value: dtex }, uM: { value: new THREE.Vector2(.5, .5) }, uR: { value: .22 }, uS: { value: 0 }, uTm: { value: 0 } } });
+      sc.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat));
+
+      let tmx = .5, tmy = .5, cmx = .5, cmy = .5, ts = 0, cs = 0, lx = .5, ly = .5, mov = false, mvT;
+      document.addEventListener('mousemove', e => {
+        tmx = e.clientX / innerWidth; tmy = 1 - (e.clientY / innerHeight);
+        const dx = tmx - lx, dy = tmy - ly; ts = Math.min(Math.sqrt(dx * dx + dy * dy) * 18, .048);
+        lx = tmx; ly = tmy; mov = true; clearTimeout(mvT); mvT = setTimeout(() => { mov = false; ts = 0 }, 80);
+      });
+      document.addEventListener('touchmove', e => { if (e.touches.length) { tmx = e.touches[0].clientX / innerWidth; tmy = 1 - (e.touches[0].clientY / innerHeight); ts = .032; clearTimeout(mvT); mvT = setTimeout(() => { ts = 0 }, 150); } }, { passive: true });
+
+      let it = 0, lt = 0;
+      function aGL() {
+        requestAnimationFrame(aGL); lt += .012; it += .008;
+        cmx += (tmx - cmx) * .06; cmy += (tmy - cmy) * .06; cs += (ts - cs) * .1;
+        if (!mov) { cmx += ((.5 + Math.sin(it * .3) * .04) - cmx) * .01; cmy += ((.5 + Math.cos(it * .25) * .03) - cmy) * .01; cs += (.006 - cs) * .03; }
+        mat.uniforms.uM.value.set(cmx, cmy); mat.uniforms.uS.value = cs; mat.uniforms.uTm.value = lt;
+        ren.render(sc, cam);
+      } aGL();
+
+      /* Particle renderer */
+      const pr = new THREE.WebGLRenderer({ canvas: pc, alpha: true, antialias: true });
+      pr.setPixelRatio(Math.min(devicePixelRatio, 2)); pr.setSize(W(), H()); pr.setClearColor(0, 0);
+      const psc = new THREE.Scene(), pcam = new THREE.PerspectiveCamera(60, W() / H(), .1, 100); pcam.position.z = 4;
+      const pg = new THREE.BufferGeometry(), pN = 180, pp = new Float32Array(pN * 3);
+      for (let i = 0; i < pN; i++) { pp[i * 3] = (Math.random() - .5) * 12; pp[i * 3 + 1] = (Math.random() - .5) * 8; pp[i * 3 + 2] = (Math.random() - .5) * 6; }
+      pg.setAttribute('position', new THREE.BufferAttribute(pp, 3));
+      const pts = new THREE.Points(pg, new THREE.PointsMaterial({ color: 0xc9a87c, size: .025, transparent: true, opacity: .45, sizeAttenuation: true }));
+      psc.add(pts);
+      const mkR = (r, col, op) => { const m = new THREE.Mesh(new THREE.TorusGeometry(r, .004, 8, 100), new THREE.MeshBasicMaterial({ color: col, opacity: op, transparent: true })); return m; };
+      const r1 = mkR(2.8, 0xc9a87c, .12); r1.rotation.x = Math.PI / 3.5; psc.add(r1);
+      const r2 = mkR(3.5, 0x5dbd8a, .07); r2.rotation.x = Math.PI / 2.2; r2.rotation.y = .6; psc.add(r2);
+      let pt = 0, pmx = 0, pmy = 0, pcmx = 0, pcmy = 0;
+      document.addEventListener('mousemove', e => { pmx = (e.clientX / innerWidth - .5) * .8; pmy = -(e.clientY / innerHeight - .5) * .5; });
+      function pA() {
+        requestAnimationFrame(pA); pt += .007; pcmx += (pmx - pcmx) * .04; pcmy += (pmy - pcmy) * .04;
+        pcam.position.x = pcmx + Math.sin(pt * .2) * .05; pcam.position.y = pcmy + Math.cos(pt * .15) * .03; pcam.lookAt(0, 0, 0);
+        pts.rotation.y = pt * .02; pts.rotation.x = pt * .01; r1.rotation.z = pt * .2; r2.rotation.z = -pt * .15; r2.rotation.y = pt * .1;
+        pr.render(psc, pcam);
+      } pA();
+
+      window.addEventListener('resize', () => {
+        ren.setSize(W(), H()); pr.setSize(W(), H()); pcam.aspect = W() / H(); pcam.updateProjectionMatrix();
+        const nt = new THREE.CanvasTexture(makeText()); nt.minFilter = nt.magFilter = THREE.LinearFilter;
+        mat.uniforms.uT.value = nt;
+      });
+    })();
+
+    /* ══ CONTACT FORM — Web3Forms ══ */
+    (function () {
+      const form = document.getElementById('contact-form');
+      const toast = document.getElementById('form-toast');
+      const btnText = document.getElementById('form-btn-text');
+      const btnLoader = document.getElementById('form-btn-loader');
+      const btn = document.getElementById('form-submit-btn');
+
+      function showToast(msg, type) {
+        toast.textContent = msg;
+        toast.className = 'show ' + type;
+        setTimeout(() => { toast.className = ''; }, 4500);
+      }
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        // Loading state
+        btnText.style.display = 'none';
+        btnLoader.style.display = 'inline';
+        btn.disabled = true;
+
+        const data = new FormData(form);
+        // Combine subject fields for cleaner email
+        const subjectLine = data.get('subject_line');
+        data.set('subject', 'Portfolio enquiry: ' + (subjectLine || 'New message'));
+
+        try {
+          const res = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: data
+          });
+          const json = await res.json();
+          if (json.success) {
+            showToast('✓  Message sent! I\'ll get back to you soon.', 'success');
+            form.reset();
+          } else {
+            showToast('✕  Something went wrong. Try again.', 'error');
+          }
+        } catch (err) {
+          showToast('✕  Network error. Please try again.', 'error');
+        } finally {
+          btnText.style.display = 'inline';
+          btnLoader.style.display = 'none';
+          btn.disabled = false;
+        }
+      });
+    })();
+
+    /* ══ CURSOR ══ */
+    const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
+    let mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY });
+    (function cl() { cur.style.left = mx + 'px'; cur.style.top = my + 'px'; rx += (mx - rx) * .1; ry += (my - ry) * .1; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(cl); })();
+    document.querySelectorAll('a,button,.work-card,.rv-card,.ct-link,.about-img,.cta-btn').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+    });
+
+    /* ══ STINGER NAV ══ */
+    const _stinger = document.getElementById('nav-stinger');
+    let _stBusy = false;
+
+    function stingerNav(id) {
+      if (_stBusy) return;
+      const target = document.getElementById(id);
+      if (!target) return;
+      _stBusy = true;
+
+      // Phase 1 — sweep IN (dark panel slides from left)
+      _stinger.classList.remove('stg-out');
+      void _stinger.offsetWidth;
+      _stinger.style.pointerEvents = 'all';
+      _stinger.classList.add('stg-in');
+
+      // Phase 2 — when fully covered: teleport scroll + trigger sweep OUT
+      setTimeout(() => {
+        window.scrollTo({ top: target.offsetTop, behavior: 'instant' });
+
+        _stinger.classList.remove('stg-in');
+        void _stinger.offsetWidth;
+        _stinger.classList.add('stg-out');
+        _stinger.style.pointerEvents = 'none';
+
+        // Phase 3 — cleanup after sweep-out finishes
+        setTimeout(() => {
+          _stinger.classList.remove('stg-out');
+          _stBusy = false;
+        }, 420);
+      }, 400);
+    }
+
+    document.querySelectorAll('[data-target]').forEach(el => {
+      el.addEventListener('click', e => { e.preventDefault(); stingerNav(el.getAttribute('data-target')); });
+    });
+
+    /* ══ ACTIVE NAV & AUTO HIDE ══ */
+    const secs = ['s-home', 's-works', 's-about', 's-contact'];
+    const btns = document.querySelectorAll('.nb-btn');
+    const nb = document.getElementById('navbar');
+    let lastScroll = window.scrollY;
+    function updateNav() {
+      const cur = window.scrollY;
+      const sy = cur + innerHeight / 3;
+      let act = 's-home';
+      secs.forEach(id => { const el = document.getElementById(id); if (el && el.offsetTop <= sy) act = id; });
+      btns.forEach(b => b.classList.toggle('on', b.getAttribute('data-target') === act));
+      if (cur > lastScroll && cur > 100) nb.classList.add('hidden');
+      else nb.classList.remove('hidden');
+      lastScroll = cur;
+    }
+    window.addEventListener('scroll', updateNav, { passive: true });
+    updateNav();
+
+    /* ══ PROGRESS BAR ══ */
+    const prog = document.getElementById('prog');
+    window.addEventListener('scroll', () => { prog.style.width = (window.scrollY / (document.body.scrollHeight - innerHeight) * 100) + '%'; }, { passive: true });
+
+    /* ══ SCROLL REVEAL ══ */
+    const ro = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('up'); ro.unobserve(e.target); } }); }, { threshold: .12, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => ro.observe(el));
+
+    /* ══ MULTI-PROJECT GALLERY ══ */
+    const ALL_GALLERY_DATA = {
+
+      infamous: {
+        title: 'INFAMOUS Esports',
+        label: 'Esports · Branding',
+        cats: {
+          'BFR S1': [
+            'Infamous Esports/BFR/S1/BFR ALL YOU NEED TO KNOW (1).jpg',
+            'Infamous Esports/BFR/S1/BFR BANNER 1 (1).jpg',
+            'Infamous Esports/BFR/S1/BFR POINTS SYSTEM.jpg',
+            'Infamous Esports/BFR/S1/BFR PRIZE DISTRIBUTION.jpg',
+            'Infamous Esports/BFR/S1/BFR ROADMAP (2).jpg',
+            'Infamous Esports/BFR/S1/BFR TIMELINE (2).jpg',
+            'Infamous Esports/BFR/S1/BfR BANNER (3).jpg',
+          ],
+          'BFR S2': [
+            'Infamous Esports/BFR/S2/BFR S2 ALL YOU NEED TO KNOW new.jpg',
+            'Infamous Esports/BFR/S2/BFR S2 BANNER.jpg',
+            'Infamous Esports/BFR/S2/BFR S2 Finals thumbnail.jpg',
+            'Infamous Esports/BFR/S2/BFR S2 GRAND PT 1.jpg',
+            'Infamous Esports/BFR/S2/BFR S2 GRAND PT 2.jpg',
+            'Infamous Esports/BFR/S2/BFR S2 Grand Finals Thumbnail.jpg',
+            'Infamous Esports/BFR/S2/BFR S2 MAP SCHEDULE FOR INSTA.jpg',
+            'Infamous Esports/BFR/S2/BFR S2 MAP SCHEDULE STREAM.jpg',
+            'Infamous Esports/BFR/S2/BFR S2 PP DISTRIBUTION new.jpg',
+            'Infamous Esports/BFR/S2/BFR S2 REELS TEMPLATE.jpg',
+            'Infamous Esports/BFR/S2/BFR S2 ROADMAP.jpg',
+            'Infamous Esports/BFR/S2/BFR S2 SEMI THUMBNAIL.jpg',
+            'Infamous Esports/BFR/S2/BFR S2 SLOT LIST.jpg',
+            'Infamous Esports/BFR/S2/BFR S2 SLOTLIST & TEAM PLAYING.jpg',
+            'Infamous Esports/BFR/S2/BFR S2 Thumbnail.jpg',
+            'Infamous Esports/BFR/S2/BFR S2 WATCH LIVE ON.jpg',
+          ],
+          'BFR S3': [
+            'Infamous Esports/BFR/S3/BFR S3  All you need to know.jpg',
+            'Infamous Esports/BFR/S3/BFR S3  Grand Thumbnail.jpg',
+            'Infamous Esports/BFR/S3/BFR S3 BANNER.jpg',
+            'Infamous Esports/BFR/S3/BFR S3 GF PT 2.jpg',
+            'Infamous Esports/BFR/S3/BFR S3 GF PT.jpg',
+            'Infamous Esports/BFR/S3/BFR S3 MATCH START FROM.jpg',
+            'Infamous Esports/BFR/S3/BFR S3 Map schedule.jpg',
+            'Infamous Esports/BFR/S3/BFR S3 PP DISTRIBUTION1.jpg',
+            'Infamous Esports/BFR/S3/BFR S3 Semi MAP SCHEDULE.jpg',
+            'Infamous Esports/BFR/S3/BFR S3 WATCH LIVE ON.jpg',
+            'Infamous Esports/BFR/S3/BFR S3 WEB BANNER1.jpg',
+            'Infamous Esports/BFR/S3/Finalist.jpg',
+          ],
+          'FMS2': [
+            'Infamous Esports/FMS2/1731503717346.jpg',
+            'Infamous Esports/FMS2/1731506477947.jpg',
+            'Infamous Esports/FMS2/1731508751227.jpg',
+            'Infamous Esports/FMS2/FMS2 ALL YOU NEED TO KNOW.jpg',
+            'Infamous Esports/FMS2/FMS2 GF MAP SCHEDULE INSTA POST.jpg',
+            'Infamous Esports/FMS2/FMS2 GF SIDE OVERLAY.jpg',
+            'Infamous Esports/FMS2/FMS2 GRAND FINALISTS.jpg',
+            'Infamous Esports/FMS2/FMS2 GRAND FINALS ALL YOU.jpg',
+            'Infamous Esports/FMS2/FMS2 GRAND FINALS THUMBNAIL.jpg',
+            'Infamous Esports/FMS2/FMS2 PAYMENT PROOF insta.jpg',
+            'Infamous Esports/FMS2/FMS2 PAYMENT PROOF.jpg',
+            'Infamous Esports/FMS2/FMS2 POINTS SYSTEM.jpg',
+            'Infamous Esports/FMS2/FMS2 PP DISTRIBUTION.jpg',
+            'Infamous Esports/FMS2/FMS2 PRE Q THUMBNAIL.jpg',
+            'Infamous Esports/FMS2/FMS2 PRE-Q MAP VIEW.png',
+            'Infamous Esports/FMS2/FMS2 ROADMAP.jpg',
+            'Infamous Esports/FMS2/FMS2 ROADMAP1 (1).jpg',
+            'Infamous Esports/FMS2/FMS2 YT MAP SCHEDULE.jpg',
+            'Infamous Esports/FMS2/FMS3 BANNER (1).jpg',
+            'Infamous Esports/FMS2/FMS3 Main BANNER.jpg',
+            'Infamous Esports/FMS2/OFFICIAL STATEMENT.jpg',
+          ],
+          'Invitationals': [
+            'Infamous Esports/II/II 3 POV + DRONE POV.png',
+            'Infamous Esports/II/II 3 POV 1v1v1.png',
+            'Infamous Esports/II/II ALL YOU NEED TO KNOW.jpg',
+            'Infamous Esports/II/II HIGHLIGHTS.png',
+            'Infamous Esports/II/II MAP SCHEDULE (1).png',
+            'Infamous Esports/II/II MAP SCHEDULE.jpg',
+            'Infamous Esports/II/II MAP+1POV.png',
+            'Infamous Esports/II/II PLAN FLAG.png',
+            'Infamous Esports/II/II TEAM CARD (1).png',
+            'Infamous Esports/II/II TOURNEY 3.png',
+            'Infamous Esports/II/II YT Banner.jpg',
+            'Infamous Esports/II/INVITATIONALS BANNER.jpeg',
+            'Infamous Esports/II/INVITATIONALS MOCKUP BANNER.jpeg',
+          ],
+          'Master Cup': [
+            'Infamous Esports/Master Cup & Glitch/C Phase Banner 1.jpg',
+            'Infamous Esports/Master Cup & Glitch/C Phase Banner 2.jpg',
+            'Infamous Esports/Master Cup & Glitch/C Phase Banner 3.jpg',
+            'Infamous Esports/Master Cup & Glitch/C Phase Banner 5.jpg',
+            'Infamous Esports/Master Cup & Glitch/COLLABORATION POST.jpg',
+            'Infamous Esports/Master Cup & Glitch/GlitchPop 4 0 Main Banner.jpg',
+            'Infamous Esports/Master Cup & Glitch/GlitchPop 4 0 web Banner.jpg',
+            'Infamous Esports/Master Cup & Glitch/GlitchPop Roadmap.jpg',
+            'Infamous Esports/Master Cup & Glitch/MC WINNER 4th5th.jpg',
+            'Infamous Esports/Master Cup & Glitch/Master Cup Gf PT p2.jpg',
+            'Infamous Esports/Master Cup & Glitch/Master Cup Winner.jpg',
+            'Infamous Esports/Master Cup & Glitch/Master cup GF PT.jpg',
+            'Infamous Esports/Master Cup & Glitch/MasterCup Main Banner.jpg',
+            'Infamous Esports/Master Cup & Glitch/MasterCup Roadmap.jpg',
+            'Infamous Esports/Master Cup & Glitch/MasterCup Web Banner.jpg',
+            'Infamous Esports/Master Cup & Glitch/MasterCup overlay.jpg',
+            'Infamous Esports/Master Cup & Glitch/Tournament Start from.jpg',
+          ],
+          'Other': [
+            'Infamous Esports/Other/HC Banner.jpg',
+            'Infamous Esports/Other/HC Roadmap.jpg',
+            'Infamous Esports/Other/INF BANNER (2).jpg',
+            'Infamous Esports/Other/INF T3 Whatsapp BANNER 2.jpg',
+            'Infamous Esports/Other/INFUL BANNER.jpg',
+            'Infamous Esports/Other/INFUL PT.jpg',
+            'Infamous Esports/Other/IUL GRAND THUMBNAIL.jpg',
+            'Infamous Esports/Other/IUL QUALIFIERS THUMBNAIL.jpg',
+            'Infamous Esports/Other/IUL QUARTER THUMBNAIL.jpg',
+            'Infamous Esports/Other/Love Esports.jpg',
+            'Infamous Esports/Other/QA BOF P3 Roadmap.jpg',
+            'Infamous Esports/Other/QA BOU P3 Point systems.jpg',
+            'Infamous Esports/Other/QA BOU P3 all you need.jpg',
+            'Infamous Esports/Other/QA BOU P3 prizepool distribution.jpg',
+            'Infamous Esports/Other/UESs1 Web banner.jpg',
+            'Infamous Esports/Other/Underdogs Series 2 banner.jpg',
+          ],
+          'UESS1': [
+            'Infamous Esports/UESS1/Grand Finalists page 1.jpg',
+            'Infamous Esports/UESS1/Grand Finalists page 2.jpg',
+            'Infamous Esports/UESS1/UESS1 4TR joining.jpg',
+            'Infamous Esports/UESS1/UESS1 All you need to know.jpg',
+            'Infamous Esports/UESS1/UESS1 Champions.jpg',
+            'Infamous Esports/UESS1/UESS1 GF MAP1 (1).jpg',
+            'Infamous Esports/UESS1/UESS1 GF everything need to know.jpg',
+            'Infamous Esports/UESS1/UESS1 Gigga joining.jpg',
+            'Infamous Esports/UESS1/UESS1 Grand finals Day 1.jpg',
+            'Infamous Esports/UESS1/UESS1 Grand finals Day 2.jpg',
+            'Infamous Esports/UESS1/UESS1 PROVIDATION (1).jpg',
+            'Infamous Esports/UESS1/UESS1 Prizpool.jpg',
+            'Infamous Esports/UESS1/UESS1 Quarter Pt g1.jpg',
+            'Infamous Esports/UESS1/UESS1 Quarter Thumbnail.jpg',
+            'Infamous Esports/UESS1/UESS1 Quarter g2 pt.jpg',
+            'Infamous Esports/UESS1/UESS1 R1 Thumbnail.jpg',
+            'Infamous Esports/UESS1/UESS1 Yt.jpg',
+            'Infamous Esports/UESS1/UESS1 gf Pt.jpg',
+            'Infamous Esports/UESS1/UESS1 mvp igl fan.jpg',
+            'Infamous Esports/UESS1/UESS1 on air talent.jpg',
+            'Infamous Esports/UESS1/UESs1 Main Banner (1).jpg',
+            'Infamous Esports/UESS1/UESs1 Main Banner (2).jpg',
+          ],
+        }
+      },
+
+      seerf: {
+        title: 'SEERF Studios',
+        label: 'Esports · Design',
+        cats: {
+          'DesiKhelShuru': [
+            'Seerf Studios/DesiKhelShuru/DesiKhelShuru  POINTS SYSTEM.jpg',
+            'Seerf Studios/DesiKhelShuru/DesiKhelShuru ALL YOU NEED TO KNOW.jpg',
+            'Seerf Studios/DesiKhelShuru/DesiKhelShuru Banner.jpg',
+            'Seerf Studios/DesiKhelShuru/DesiKhelShuru Banner1.jpg',
+            'Seerf Studios/DesiKhelShuru/DesiKhelShuru PP distribution.jpg',
+            'Seerf Studios/DesiKhelShuru/DesiKhelShuru Roadmap.jpg',
+          ],
+          'Glacier Cup': [
+            'Seerf Studios/Glacier Cup/GC BANNER (1).jpg',
+            'Seerf Studios/Glacier Cup/GC BANNER.jpg',
+            'Seerf Studios/Glacier Cup/GC CUP SEMI THUMBNAIL.jpg',
+            'Seerf Studios/Glacier Cup/GC POINT SYSTEMS.jpg',
+            'Seerf Studios/Glacier Cup/GC PP DISTRIBUTION.jpg',
+            'Seerf Studios/Glacier Cup/GC PQ G1 Page1.jpg',
+            'Seerf Studios/Glacier Cup/GC Pre-Quarter Thumbnail.jpg',
+            'Seerf Studios/Glacier Cup/GC QUARTER THUMBNAIL.jpg',
+            'Seerf Studios/Glacier Cup/GC Quarter Pt 1.jpg',
+          ],
+          'J&K Cup': [
+            'Seerf Studios/J&K Convergance Cup/20250929_195550.jpg',
+            'Seerf Studios/J&K Convergance Cup/20250929_203923.jpg',
+            'Seerf Studios/J&K Convergance Cup/BGMI HIGHLIGHTS (2).jpg',
+            'Seerf Studios/J&K Convergance Cup/Brackets Finals.jpg',
+            'Seerf Studios/J&K Convergance Cup/Co-Sponser Seerf Banner (3).jpg',
+            'Seerf Studios/J&K Convergance Cup/Everything u need to know J&K BGMI.jpg',
+            'Seerf Studios/J&K Convergance Cup/FINALS.jpg',
+            'Seerf Studios/J&K Convergance Cup/J&K BGMI.jpg',
+            'Seerf Studios/J&K Convergance Cup/J&K Banner 4.jpg',
+            'Seerf Studios/J&K Convergance Cup/J&K Valorant.jpg',
+            'Seerf Studios/J&K Convergance Cup/J&K Valorant1 2.jpg',
+            'Seerf Studios/J&K Convergance Cup/PP Dis J&K BGMI.jpg',
+            'Seerf Studios/J&K Convergance Cup/PQ G1.jpg',
+            'Seerf Studios/J&K Convergance Cup/Points Distribution J&K BGMI1.jpg',
+            'Seerf Studios/J&K Convergance Cup/Quarter (2).jpg',
+            'Seerf Studios/J&K Convergance Cup/Reels Thumbnail.jpg',
+            'Seerf Studios/J&K Convergance Cup/Roadmap J&K BGMI.jpg',
+            'Seerf Studios/J&K Convergance Cup/SEMI FINALS.jpg',
+            'Seerf Studios/J&K Convergance Cup/Seerf Banner 1 lakh (1).jpg',
+            'Seerf Studios/J&K Convergance Cup/Spacial Thanks to banner.jpg',
+            'Seerf Studios/J&K Convergance Cup/Valorant PP dis.jpg',
+            'Seerf Studios/J&K Convergance Cup/Valorant Thumbnail.jpg',
+            'Seerf Studios/J&K Convergance Cup/Vanue Banner (1).jpg',
+          ],
+          'Other': [
+            'Seerf Studios/Other/ALS4 Banner.jpg',
+            'Seerf Studios/Other/Champion (2).jpg',
+            'Seerf Studios/Other/FF Swipe Up (1).jpg',
+            'Seerf Studios/Other/IMG_20251212_134416.jpg',
+            'Seerf Studios/Other/IMG_20251212_134432.jpg',
+            'Seerf Studios/Other/MOG CUP ALL YOU NEED.jpg',
+            'Seerf Studios/Other/MOG CUP Banner.jpg',
+            'Seerf Studios/Other/MOG PP split.jpg',
+            'Seerf Studios/Other/MOG Points System.jpg',
+            'Seerf Studios/Other/MOG Roadmap.jpg',
+            'Seerf Studios/Other/Runner Up.jpg',
+            'Seerf Studios/Other/Swipe Up (4).jpg',
+            'Seerf Studios/Other/WCS1 Banner.jpg',
+            'Seerf Studios/Other/WINNERS.jpg',
+            'Seerf Studios/Other/Zorko banner (1).jpg',
+            'Seerf Studios/Other/Zorko banner2.jpg',
+            'Seerf Studios/Other/Zorko banner22 (1).jpg',
+          ],
+          'QA AC': [
+            'Seerf Studios/QA AC/QA AC Finals (3).jpg',
+            'Seerf Studios/QA AC/QA AC Finals Thumbnail.jpg',
+            'Seerf Studios/QA AC/QA AC Grand final Thumbnails.jpg',
+            'Seerf Studios/QA AC/QA AC Grand finals p2.jpg',
+            'Seerf Studios/QA AC/QA AC PP distribution.jpg',
+            'Seerf Studios/QA AC/QA AC Point System.jpg',
+            'Seerf Studios/QA AC/QA AC Roadmap.jpg',
+            'Seerf Studios/QA AC/QA AC Roadmap1.jpg',
+            'Seerf Studios/QA AC/QA AC SEMI THUMBNAIL.jpg',
+            'Seerf Studios/QA AC/QA ARISTOS CUP (1).jpg',
+          ],
+          'SMC': [
+            'Seerf Studios/SMC/Mega Championship Banner.jpg',
+            'Seerf Studios/SMC/PT G1.jpg',
+            'Seerf Studios/SMC/SMC ALL YOU NEED TO KNOW (1).jpg',
+            'Seerf Studios/SMC/SMC Banner (2).jpg',
+            'Seerf Studios/SMC/SMC Finals Thumbnail.jpg',
+            'Seerf Studios/SMC/SMC PRIZEPOOL SPLIT.jpg',
+            'Seerf Studios/SMC/SMC Pre-Quarter Thumbnail.jpg',
+            'Seerf Studios/SMC/SMC Quarter Thumbnail (1).jpg',
+            'Seerf Studios/SMC/SMC ROADMAP1.jpg',
+            'Seerf Studios/SMC/SMC Semi-finals 1-9 pt.jpg',
+            'Seerf Studios/SMC/SMC points system.jpg',
+          ],
+          'Summer Cup': [
+            'Seerf Studios/Summer Cup/Finals Thumbnail.jpg',
+            'Seerf Studios/Summer Cup/Q g1 pt1.jpg',
+            'Seerf Studios/Summer Cup/Quarter Sc.jpg',
+            'Seerf Studios/Summer Cup/SC Everything need to know.jpg',
+            'Seerf Studios/Summer Cup/SC Finals 8-16.jpg',
+            'Seerf Studios/Summer Cup/SC GF Page 2 pt.jpg',
+            'Seerf Studios/Summer Cup/SC GF page 1 PT.jpg',
+            'Seerf Studios/Summer Cup/SC GRAND (1).jpg',
+            'Seerf Studios/Summer Cup/SC PP SPLIT.jpg',
+            'Seerf Studios/Summer Cup/SC Semi Finals Thumbnail.jpg',
+            'Seerf Studios/Summer Cup/SC finals 1-7.jpg',
+            'Seerf Studios/Summer Cup/SUMMER CUP BANNER.jpg',
+            'Seerf Studios/Summer Cup/Summer Cup ROADMAP (2).jpg',
+            'Seerf Studios/Summer Cup/Summer Cup ROADMAP.jpg',
+          ],
+        }
+      },
+
+      esportsvol2: {
+        title: 'Esports Works Vol.2',
+        label: 'Esports · Vol.2',
+        cats: {
+          'HeatBeast': [
+            'Esports Work Vol.2/HeatBeast/US CALENDAR 4.jpg',
+            'Esports Work Vol.2/HeatBeast/US Collaboration Banner (1).jpg',
+            'Esports Work Vol.2/HeatBeast/US ENTRY FEE (1).jpg',
+            'Esports Work Vol.2/HeatBeast/US LAN LOCTION BANNER.jpg',
+            'Esports Work Vol.2/HeatBeast/US PRIZEPOOL SPLIT.jpg',
+            'Esports Work Vol.2/HeatBeast/US ROADMAP.jpg',
+            'Esports Work Vol.2/HeatBeast/US Register Now.jpg',
+            'Esports Work Vol.2/HeatBeast/Universal Series ALL YOU NEED TO KNOW.jpg',
+            'Esports Work Vol.2/HeatBeast/Universal Series Banner (1).jpg',
+            'Esports Work Vol.2/HeatBeast/Universal Series COMING SOON Banner.jpg',
+            'Esports Work Vol.2/HeatBeast/Universal Series COMING SOON Glass Effect Banner.jpg',
+            'Esports Work Vol.2/HeatBeast/Universal Series COMING SOON Paper Tear effect banner.jpg',
+            'Esports Work Vol.2/HeatBeast/Universal Series Main Banner 2.jpg',
+            'Esports Work Vol.2/HeatBeast/Universal Series Main Banner.jpg',
+          ],
+          'SE': [
+            'Esports Work Vol.2/SE/!SE  Elite Scrims Schedule.jpg',
+            'Esports Work Vol.2/SE/ES PT G1.jpg',
+            'Esports Work Vol.2/SE/SE  ELITE SCRIMS SCHEDULE.jpg',
+            'Esports Work Vol.2/SE/SE DOMINATION Scrims Posters.jpg',
+            'Esports Work Vol.2/SE/SE Domination Scrims Schedule.jpg',
+            'Esports Work Vol.2/SE/SE ELITE SCRIMS Poster.jpg',
+          ],
+          'Treasure NFT': [
+            'Esports Work Vol.2/Treasure NFT/Treasure NFT  LAN AT AMRITSAR.jpg',
+            'Esports Work Vol.2/Treasure NFT/Treasure NFT ALL YOU NEED TO KNOW.jpg',
+            'Esports Work Vol.2/Treasure NFT/Treasure NFT LIVE AT TREASURE NFT.jpg',
+            'Esports Work Vol.2/Treasure NFT/Treasure NFT Map Schedule GRAND Finals.jpg',
+            'Esports Work Vol.2/Treasure NFT/Treasure NFT Map Schedule Quarter finals.jpg',
+            'Esports Work Vol.2/Treasure NFT/Treasure NFT Map Schedule R1&R2.jpg',
+            'Esports Work Vol.2/Treasure NFT/Treasure NFT Map Schedule R3.jpg',
+            'Esports Work Vol.2/Treasure NFT/Treasure NFT Map Schedule Semi-Finals.jpg',
+            'Esports Work Vol.2/Treasure NFT/Treasure NFT PP DISTRIBUTION (1).jpg',
+            'Esports Work Vol.2/Treasure NFT/Treasure NFT Points System (1).jpg',
+            'Esports Work Vol.2/Treasure NFT/Treasure NFT Roadmap 2.jpg',
+            'Esports Work Vol.2/Treasure NFT/Treasure NFT banner (1).jpg',
+            'Esports Work Vol.2/Treasure NFT/Treasure NFT roadmap (1).jpg',
+          ],
+          'Voltex': [
+            'Esports Work Vol.2/Voltex/1741455085561.jpg',
+            'Esports Work Vol.2/Voltex/ANNOUNCEMENT banner.jpg',
+            'Esports Work Vol.2/Voltex/BOU S3 BANNER.jpg',
+            'Esports Work Vol.2/Voltex/BOU S3 PP DISTRIBUTION.jpg',
+            'Esports Work Vol.2/Voltex/BOU S3 ROADMAP (1).jpg',
+            'Esports Work Vol.2/Voltex/BOU S3 Tournament Roadmap (1).jpg',
+            'Esports Work Vol.2/Voltex/Entry 25 VOLTxFLUX Paid Scrims.jpg',
+            'Esports Work Vol.2/Voltex/Gaming arena Daily showdown.jpg',
+            'Esports Work Vol.2/Voltex/Paid Scrim banner.jpg',
+            'Esports Work Vol.2/Voltex/Scan & Pay voltx.jpg',
+            'Esports Work Vol.2/Voltex/VENIMIC 2 stage.jpg',
+            'Esports Work Vol.2/Voltex/VENIMIC Banner (1).jpg',
+            'Esports Work Vol.2/Voltex/VOLTxFLUX Scan & Pay banner.jpg',
+            'Esports Work Vol.2/Voltex/VOLTxGaming Roadmap.jpg',
+            'Esports Work Vol.2/Voltex/VoltxGaming 10K Roadmap New.jpg',
+            'Esports Work Vol.2/Voltex/VoltxGaming BOU 10K Banner1.jpg',
+            'Esports Work Vol.2/Voltex/VoltxGaming Paid Scrims.jpg',
+            'Esports Work Vol.2/Voltex/we are joining banner.jpg',
+          ],
+        }
+      },
+
+      tournamentlogos: {
+        title: 'Tournament Logos',
+        label: 'Logo Design',
+        cats: {
+          'Tournament Logos': [
+            'Tournament Logos/20250319_003825.jpg',
+            'Tournament Logos/20251022_212930.jpg',
+            'Tournament Logos/IMG_20250308_144332.jpg',
+            'Tournament Logos/IMG_20250319_002424.jpg',
+            'Tournament Logos/IMG_20250517_232749.jpg',
+            'Tournament Logos/IMG_20260329_231327.jpg',
+            'Tournament Logos/IMG_20260329_231728.jpg',
+            'Tournament Logos/IMG_20260329_231742.jpg',
+            'Tournament Logos/IMG_20260329_231753.jpg',
+            'Tournament Logos/IMG_20260329_231812.jpg',
+            'Tournament Logos/INFAMOUS Championship Underdog Phase Logo.jpg',
+            'Tournament Logos/Logo (1).jpeg',
+            'Tournament Logos/Logo (2).jpeg',
+            'Tournament Logos/Logo (3).jpeg',
+            'Tournament Logos/Logo (4).jpeg',
+            'Tournament Logos/Logo (5).jpeg',
+            'Tournament Logos/Logo (6).jpeg',
+            'Tournament Logos/Logo.jpeg',
+            'Tournament Logos/Untitled (10).jpeg',
+            'Tournament Logos/Untitled (5).jpeg',
+            'Tournament Logos/Untitled (9).jpeg',
+            'Tournament Logos/Untitled6 (1).jpeg',
+          ],
+        }
+      },
+
+      thumbnails: {
+        title: 'Thumbnails & Banners',
+        label: 'Thumbnail · Banner',
+        cats: {
+          'Esports Thumbnails': [
+            'Thumbnail & Banner/Esports Thumbnail/BFR S2 Grand Finals Thumbnail.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/BFR S3  Grand Thumbnail.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/BGMI CUSTOMS THUMBNAIL.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/BGMI HIGHLIGHTS (2).jpg',
+            'Thumbnail & Banner/Esports Thumbnail/BGMI PS THUMBNAIL (4).jpg',
+            'Thumbnail & Banner/Esports Thumbnail/FMS2 GRAND FINALS THUMBNAIL.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/FMS2 PRE Q THUMBNAIL.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/GC CUP SEMI THUMBNAIL.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/GC Pre-Quarter Thumbnail.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/GC QUARTER THUMBNAIL.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/IUL GRAND THUMBNAIL.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/IUL QUALIFIERS THUMBNAIL.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/QA SEMI THUMBNAIL.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/Quarter.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/Semi Finals thumbnail.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/UESS1 Grand finals Day 1.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/UESS1 Quarter Thumbnail.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/UESS1 SEMI Thumbnail.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/US20 Grand Thumbnail.jpg',
+            'Thumbnail & Banner/Esports Thumbnail/VLH PRACTICE SCRIMS THUMBNAIL (1).jpg',
+          ],
+          'General Thumbnails': [
+            'Thumbnail & Banner/Thumbnail/10hrs Special Stream Thumbnail.jpg',
+            'Thumbnail & Banner/Thumbnail/1v1 Pookie Subscribers Thumbnail.jpg',
+            'Thumbnail & Banner/Thumbnail/Butterfly thumbnail1.jpg',
+            'Thumbnail & Banner/Thumbnail/Conqueror RANK push.jpg',
+            'Thumbnail & Banner/Thumbnail/How to setUp Rexzz.jpg',
+            'Thumbnail & Banner/Thumbnail/Last Standing Thumbnail1.jpg',
+            'Thumbnail & Banner/Thumbnail/Ludo Sneha Is Live.jpg',
+            'Thumbnail & Banner/Thumbnail/NEW 3 8 EXPLORING.jpg',
+            'Thumbnail & Banner/Thumbnail/Solo 7 kills thunb.jpg',
+            'Thumbnail & Banner/Thumbnail/Ultimate Royal Rank push Thumbnail.jpg',
+            'Thumbnail & Banner/Thumbnail/Untitled14.jpg',
+            'Thumbnail & Banner/Thumbnail/indus Solo vs Squad 30+ Kills thumbnail.jpg',
+            'Thumbnail & Banner/Thumbnail/xBeasttt77 Live Thumbnail (1).jpg',
+          ],
+        }
+      },
+
+      logos: {
+        title: 'Logos',
+        label: 'Logo · Branding',
+        cats: {
+          'Logos': [
+            'LOGOS/AC Logo 3.jpg',
+            'LOGOS/DH LOGO (1).jpeg',
+            'LOGOS/DH LOGO.jpeg',
+            'LOGOS/EK logo.jpg',
+            'LOGOS/FAME ESPORTS LOGO 1.jpg',
+            'LOGOS/FAME ESPORTS LOGO 2.jpg',
+            'LOGOS/Final AC logo (4k).jpg',
+            'LOGOS/MV logo.jpeg',
+            'LOGOS/Orbit  logo.jpeg',
+            'LOGOS/Orbit logo.jpeg',
+            'LOGOS/RE logo White.jpg',
+            'LOGOS/RexZ BakUp & Restore icon (1).jpeg',
+            'LOGOS/Rose + Music Logo.jpg',
+            'LOGOS/Rudra Esports logo (5).jpeg',
+            'LOGOS/SLGX LOGO.jpg',
+            'LOGOS/Untitled13.jpeg',
+            'LOGOS/Work Else logo.jpg',
+            'LOGOS/ZL logo 2(1).jpeg',
+            'LOGOS/ZLight System Logo (2).jpeg',
+            'LOGOS/ZLight System Logo.jpeg',
+            'LOGOS/vX logo.jpeg',
+          ],
+        }
+      },
+
+      socialbanners: {
+        title: 'Social Media Banners',
+        label: 'Social · Banners',
+        cats: {
+          'General': [
+            'Social Media Banners/Admission Open pamphlet Poster.jpg',
+            'Social Media Banners/Caster Magic Farewell.jpg',
+            'Social Media Banners/FAREWELL Kaher banner (1).jpg',
+            'Social Media Banners/Germany study visa.jpg',
+            'Social Media Banners/HARSH B\u0027day Banner.jpg',
+            'Social Media Banners/IMG_20250715_232701.jpg',
+            'Social Media Banners/IMG_20251003_210957.jpg',
+            'Social Media Banners/Khasta Banner.jpg',
+            'Social Media Banners/Linkdin cover Page.jpg',
+            'Social Media Banners/Monty Bday Banner.jpg',
+            'Social Media Banners/PANZER FAREWELL.jpg',
+            'Social Media Banners/PERFUME BANNER DESIGN by NIKHIL GRAFIC@1.5x.jpg',
+            'Social Media Banners/PTE & VISA poster - The Mentor.jpg',
+            'Social Media Banners/RexZ BuckUp & Restore Banner.jpeg',
+            'Social Media Banners/SJ Farewell.jpg',
+            'Social Media Banners/SNEHA B\u0027day Banner (1).jpg',
+            'Social Media Banners/Spoken English classes poster 2.jpg',
+            'Social Media Banners/Study Galaxy Banner (1).jpg',
+            'Social Media Banners/Study Galaxy Banner.jpg',
+            'Social Media Banners/The mentor Insta poster 3pic.jpg',
+            'Social Media Banners/Uk study Visa.jpg',
+            'Social Media Banners/Untitled14 (2).jpg',
+            'Social Media Banners/Untitled4111 (1).jpg',
+            'Social Media Banners/Untitled41111 (1).jpg',
+            'Social Media Banners/Untitled411112.jpg',
+            'Social Media Banners/Untitled411113 (1).jpg',
+            'Social Media Banners/Untitled411114 (4).jpg',
+            'Social Media Banners/Welcome Banner (1).jpg',
+            'Social Media Banners/Work Else banner (2).jpg',
+            'Social Media Banners/snipyislive YT banner.jpg',
+            'Social Media Banners/treeko.jpg',
+          ],
+          'Lekme': [
+            'Social Media Banners/Lekme/Coming Soon (1).jpg',
+            'Social Media Banners/Lekme/Coming soon Story post.jpg',
+            'Social Media Banners/Lekme/Frame post 3.jpg',
+            'Social Media Banners/Lekme/Frame post 4.jpg',
+            'Social Media Banners/Lekme/Holi Story post (1).jpg',
+            'Social Media Banners/Lekme/Lakme Poster 1.jpg',
+            'Social Media Banners/Lekme/Lakme Poster 2.jpg',
+            'Social Media Banners/Lekme/Lakme Poster 3 (1).jpg',
+            'Social Media Banners/Lekme/Lakme Poster 31.jpg',
+            'Social Media Banners/Lekme/Shastri Nagar Korean Poster1.jpg',
+            'Social Media Banners/Lekme/Trikuta Nagar Korean Poster.jpg',
+          ],
+        }
+      },
+
+    };
+
+    let currentProject = null;
+    let currentCat = 'All';
+    let lbImages = [];
+    let lbIndex = 0;
+
+    function getProjectCats(proj) { return ALL_GALLERY_DATA[proj].cats; }
+
+    function getAllImages(proj, cat) {
+      const cats = getProjectCats(proj);
+      if (cat === 'All') {
+        const all = [];
+        Object.keys(cats).forEach(k => cats[k].forEach(img => all.push({ src: img, cat: k })));
+        return all;
+      }
+      return (cats[cat] || []).map(img => ({ src: img, cat }));
+    }
+
+    function buildCatButtons() {
+      const wrap = document.getElementById('gal-cats');
+      wrap.innerHTML = '';
+      const cats = getProjectCats(currentProject);
+      const allCount = getAllImages(currentProject, 'All').length;
+      // All button
+      const allBtn = document.createElement('button');
+      allBtn.className = 'gal-cat-btn' + (currentCat === 'All' ? ' active' : '');
+      allBtn.textContent = 'All (' + allCount + ')';
+      allBtn.onclick = () => { currentCat = 'All'; buildCatButtons(); buildGrid(); };
+      wrap.appendChild(allBtn);
+      // Per-category buttons
+      Object.keys(cats).forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'gal-cat-btn' + (cat === currentCat ? ' active' : '');
+        btn.textContent = cat + ' (' + cats[cat].length + ')';
+        btn.onclick = () => { currentCat = cat; buildCatButtons(); buildGrid(); };
+        wrap.appendChild(btn);
+      });
+    }
+
+    /* Bento masonry: calculate row span from image's natural aspect ratio */
+    function resizeBentoItem(item) {
+      const img = item.querySelector('img');
+      if (!img || !img.naturalHeight || !img.naturalWidth) return;
+      const grid = document.getElementById('gal-grid');
+      if (!grid) return;
+      const rowH = parseInt(getComputedStyle(grid).gridAutoRows) || 10;
+      const gap = parseFloat(getComputedStyle(grid).rowGap) || 8;
+      const itemW = item.getBoundingClientRect().width;
+      if (!itemW) return;
+      const renderedH = itemW * (img.naturalHeight / img.naturalWidth);
+      const spans = Math.ceil((renderedH + gap) / (rowH + gap));
+      item.style.gridRowEnd = `span ${Math.max(spans, 1)}`;
+    }
+
+    function resizeAllBentoItems() {
+      document.querySelectorAll('#gal-grid .gal-item').forEach(resizeBentoItem);
+    }
+
+    function buildGrid() {
+      const grid = document.getElementById('gal-grid');
+      const countEl = document.getElementById('gal-count');
+      grid.innerHTML = '';
+      lbImages = getAllImages(currentProject, currentCat);
+      countEl.textContent = lbImages.length + ' images';
+
+      // Bento column pattern: every 5th & 6th image spans 2 cols (wide)
+      const bentoPattern = ['', '', '', '', 'b-wide', 'b-wide', '', '', '', ''];
+
+      lbImages.forEach((item, i) => {
+        const el = document.createElement('div');
+        const colClass = bentoPattern[i % bentoPattern.length];
+        el.className = 'gal-item' + (colClass ? ' ' + colClass : '');
+        el.innerHTML = `
+          <img src="${encodeURIPath(item.src)}" alt="" loading="lazy" />
+          <div class="gal-cat-badge">${item.cat}</div>
+          <div class="gal-item-overlay"><div class="gal-item-overlay-icon">⊕</div></div>
+        `;
+        el.onclick = () => openLightbox(i);
+        grid.appendChild(el);
+
+        // Set row span as soon as image dimensions are known
+        const imgEl = el.querySelector('img');
+        if (imgEl.complete && imgEl.naturalHeight) {
+          resizeBentoItem(el);
+        } else {
+          imgEl.addEventListener('load', () => resizeBentoItem(el));
+        }
+      });
+    }
+
+    window.addEventListener('resize', resizeAllBentoItems);
+
+
+    function encodeURIPath(p) {
+      return p.split('/').map(seg => encodeURIComponent(seg)).join('/');
+    }
+
+    function openGallery(projectKey, cardEl) {
+      currentProject = projectKey;
+      currentCat = 'All';
+      const proj = ALL_GALLERY_DATA[projectKey];
+      document.getElementById('gal-title').textContent = proj.title;
+      document.getElementById('gal-label').textContent = proj.label;
+
+      const overlay = document.getElementById('gallery-overlay');
+      const galBg = document.getElementById('gal-bg');
+
+      // Set blurred cover backdrop from clicked card's cover image
+      const coverImg = cardEl && cardEl.querySelector('.card-cover-img');
+      if (galBg) {
+        galBg.style.backgroundImage = coverImg ? `url('${coverImg.src}')` : '';
+      }
+
+      // Reset reveal state
+      overlay.classList.remove('revealed');
+
+      if (cardEl) {
+        const rect = cardEl.getBoundingClientRect();
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+
+        // Pixel-precise clip-path starting from the card's bounds
+        const startClip = `inset(${Math.round(rect.top)}px ${Math.round(vw - rect.right)}px ${Math.round(vh - rect.bottom)}px ${Math.round(rect.left)}px round 14px)`;
+
+        // Set to card position instantly (no transition)
+        overlay.style.transition = 'none';
+        overlay.style.clipPath = startClip;
+        overlay.style.opacity = '0.4';
+        overlay.style.pointerEvents = 'none';
+        overlay.classList.add('active');
+
+        // Force reflow so the browser registers the starting state
+        overlay.getBoundingClientRect();
+
+        // Animate to fullscreen
+        overlay.style.transition = 'clip-path .5s cubic-bezier(.16,1,.3,1), opacity .2s ease';
+        overlay.style.opacity = '1';
+        overlay.style.clipPath = 'inset(0px 0px 0px 0px round 0px)';
+        overlay.style.pointerEvents = 'all';
+
+        // Trigger staggered content reveal after clip anim starts
+        setTimeout(() => overlay.classList.add('revealed'), 170);
+
+      } else {
+        overlay.style.clipPath = '';
+        overlay.style.opacity = '';
+        overlay.style.transition = '';
+        overlay.classList.add('active');
+        setTimeout(() => overlay.classList.add('revealed'), 80);
+      }
+
+      document.body.style.overflow = 'hidden';
+      buildCatButtons();
+      buildGrid();
+      setTimeout(() => {
+        document.querySelectorAll('.gal-item,.gal-close,.gal-cat-btn,.lb-btn,.lb-close').forEach(el => {
+          el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+          el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+      }, 50);
+    }
+
+    function closeGallery() {
+      const overlay = document.getElementById('gallery-overlay');
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      // Reset reveal state
+      overlay.classList.remove('revealed');
+
+      // Shrink to center
+      overlay.style.transition = 'clip-path .32s cubic-bezier(.77,0,.18,1), opacity .2s ease';
+      overlay.style.clipPath = `inset(${Math.round(vh * .3)}px ${Math.round(vw * .22)}px ${Math.round(vh * .3)}px ${Math.round(vw * .22)}px round 20px)`;
+      overlay.style.opacity = '0';
+      overlay.style.pointerEvents = 'none';
+
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        overlay.style.clipPath = '';
+        overlay.style.opacity = '';
+        overlay.style.transition = '';
+        overlay.style.pointerEvents = '';
+        document.body.style.overflow = '';
+        // Clear the backdrop image
+        const galBg = document.getElementById('gal-bg');
+        if (galBg) galBg.style.backgroundImage = '';
+      }, 350);
+    }
+
+    function openLightbox(index) {
+      lbIndex = index;
+      renderLightbox();
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+    }
+
+    function renderLightbox() {
+      const item = lbImages[lbIndex];
+      const img = document.getElementById('lb-img');
+      img.style.opacity = '0';
+      img.src = encodeURIPath(item.src);
+      img.onload = () => { img.style.opacity = '1'; };
+      document.getElementById('lb-counter').textContent = (lbIndex + 1) + ' / ' + lbImages.length;
+      document.getElementById('lb-cat-label').textContent = item.cat;
+    }
+
+    function lbPrev() { lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; renderLightbox(); }
+    function lbNext() { lbIndex = (lbIndex + 1) % lbImages.length; renderLightbox(); }
+
+    document.getElementById('lb-prev').onclick = lbPrev;
+    document.getElementById('lb-next').onclick = lbNext;
+    document.getElementById('lb-close').onclick = closeLightbox;
+    document.getElementById('lightbox').addEventListener('click', function (e) {
+      if (e.target === this) closeLightbox();
+    });
+
+    document.addEventListener('keydown', e => {
+      const lb = document.getElementById('lightbox');
+      const gal = document.getElementById('gallery-overlay');
+      if (lb.classList.contains('active')) {
+        if (e.key === 'ArrowLeft') lbPrev();
+        if (e.key === 'ArrowRight') lbNext();
+        if (e.key === 'Escape') closeLightbox();
+      } else if (gal.classList.contains('active')) {
+        if (e.key === 'Escape') closeGallery();
+      }
+    });
+
+    let lbTouchX = null;
+    document.getElementById('lightbox').addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+    document.getElementById('lightbox').addEventListener('touchend', e => {
+      if (lbTouchX === null) return;
+      const dx = e.changedTouches[0].clientX - lbTouchX;
+      if (Math.abs(dx) > 50) { dx < 0 ? lbNext() : lbPrev(); }
+      lbTouchX = null;
+    }, { passive: true });
+
+    document.querySelectorAll('.lb-btn,.lb-close').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+    });
+  </script>
+</body>
+
+</html>
